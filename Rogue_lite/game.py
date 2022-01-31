@@ -1,6 +1,7 @@
 import pygame
 import sys
 import controls
+from Weapon import *
 from Player import *
 from Gui import *
 
@@ -17,10 +18,10 @@ def game(height, width):
     pygame.display.set_icon(icon)
     clock = pygame.time.Clock()
     font = pygame.font.SysFont("Arial",11)
+    weapon = Weapon(25,25)
 
-
-    player = Player(25, 25)
-    objects = [player]
+    player = Player(25, 25, weapon)
+    objects = [player, weapon]
     gui = Gui(screen, objects,640,480)
 
     # Game Loop

@@ -3,15 +3,20 @@ def check_keypress(event, player):
     if event.key == pygame.K_w:
         player.mv_up()
         player.state = "moving"
+        player.weapon.state = "moving"
     if event.key == pygame.K_s:
         player.mv_down()
         player.state = "moving"
+        player.weapon.state = "moving"
     if event.key == pygame.K_a:
         player.mv_left()
         player.state = "moving"
+        player.weapon.state = "moving"
     if event.key == pygame.K_d:
         player.mv_right()
-    player.state = "moving"
+        player.state = "moving"
+    player.weapon.state = "moving"
+
     if event.key == pygame.K_UP:
         player.attack_up()
     if event.key == pygame.K_DOWN:
@@ -27,12 +32,14 @@ def check_keypress(event, player):
 def key_up(event, player):
     if event.key == pygame.K_w or event.key == pygame.K_s:
         player.y_change = 0
-        player.image = player.images[0]
-        player.state = "stopped"
+        player.weapon.y_change = 0
+        player.stop()
+
     if event.key == pygame.K_a or event.key == pygame.K_d:
         player.x_change = 0
-        player.image = player.images[0]
-        player.state = "stopped"
+        player.weapon.x_change = 0
+        player.stop()
+
     if event.key == pygame.K_UP:
         player.attack_up()
     if event.key == pygame.K_DOWN:
