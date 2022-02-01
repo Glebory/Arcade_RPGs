@@ -18,48 +18,59 @@ class Player(GameObject):
         self.image = self._images[self._index]
         self._weapon = weapon
         self.speed = 0.6
+        self.last_images = self._imagesF
 
     def mv_up(self):
         self.y_change = -self.speed
         self.weapon.y_change = -self.speed
+        self.weapon.last_images = self.weapon.images
+        self.weapon.images = self.weapon.imagesF
+        self.weapon.x_coord = self.x_coord
+        self.last_images = self.images
         self.images = self._imagesB
 
     def mv_down(self):
         self.y_change = self.speed
         self.weapon.y_change = self.speed
+        self.weapon.last_images = self.weapon.images
         self.weapon.images = self.weapon.imagesF
+        self.weapon.x_coord = self.x_coord
+        self.last_images = self.images
         self.images = self._imagesF
 
     def mv_left(self):
         self.x_change = -self.speed
         self.weapon.x_change = -self.speed
+        self.weapon.last_images = self.weapon.images
         self.weapon.images = self.weapon.imagesL
         self.weapon.x_coord = self.x_coord -16
+        self.last_images = self.images
         self.images = self._imagesL
 
     def mv_right(self):
         self.x_change = self.speed
         self.weapon.x_change = self.speed
+        self.weapon.last_images = self.weapon.images
         self.weapon.images = self.weapon.imagesR
         self.weapon.x_coord = self.x_coord
+        self.last_images = self.images
         self.images = self._imagesR
 
     def attack_up(self):
-       # if self._weapon.type == "gun":
-        #    self._weapon.attack()
+        self.last_images = self.images
         self.images = self._imagesB
 
     def attack_down(self):
-        if self._weapon.type == "gun":
-            self._weapon.attack()
+
+        self.last_images = self.images
         self.images = self._imagesF
 
     def attack_left(self):
-
+        self.last_images = self.images
         self.images = self._imagesL
 
     def attack_right(self):
-
+        self.last_images = self.images
         self.images = self._imagesR
 
     def get_weapon(self):
@@ -71,7 +82,10 @@ class Player(GameObject):
 
     weapon = property(get_weapon, set_weapon)
 
+
     def stop(self):
+        self.images = self.last_images
+        self.weapon.images = self.weapon.last_images
         self.image = self.images[0]
         self.state = "stopped"
         self.weapon.state = "stopped"

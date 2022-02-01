@@ -1,10 +1,11 @@
 import pygame
 
+
 class GameObject(pygame.sprite.Sprite):
     def __init__(self, x, y, images=None):
         pygame.sprite.Sprite.__init__(self)
         if images is None:
-            images = [pygame.image.load('images/Error.png')]
+            images = [pygame.image.load('images/Error.png').convert_alpha()]
         self._x = x
         self._y = y
         self._images = images
@@ -22,7 +23,8 @@ class GameObject(pygame.sprite.Sprite):
     def set_x(self, val):
         self._x = val
         return
-    x_coord= property(get_x,set_x)
+
+    x_coord = property(get_x, set_x)
 
     def get_y(self):
         return self._y
@@ -30,6 +32,7 @@ class GameObject(pygame.sprite.Sprite):
     def set_y(self, val):
         self._y = val
         return
+
     y_coord = property(get_y, set_y)
 
     def get_image(self):
@@ -38,6 +41,7 @@ class GameObject(pygame.sprite.Sprite):
     def set_image(self, image):
         self._image = image
         return
+
     image = property(get_image, set_image)
 
     def get_images(self):
@@ -46,6 +50,7 @@ class GameObject(pygame.sprite.Sprite):
     def set_images(self, image_list):
         self._images = image_list
         return
+
     images = property(get_images, set_images)
 
     def get_x_change(self):
@@ -91,7 +96,6 @@ class GameObject(pygame.sprite.Sprite):
         self._state = state
         return
 
-
     state = property(get_state, set_state)
 
     def get_frames(self):
@@ -103,28 +107,26 @@ class GameObject(pygame.sprite.Sprite):
 
     frames = property(get_frames, set_frames)
 
-
     def tick(self, h, w):
         self.x_coord += self._x_change
         self.y_coord += self._y_change
         if self.state == "moving":
             self.index += 1
 
-            if self.index >= len(self.images)*self.frames:
+            if self.index >= len(self.images) * self.frames:
                 self.index = 0
 
-            self.image = self.images[self.index//self.frames]
+            self.image = self.images[self.index // self.frames]
 
         if self._x < 0:
             self._x = 0
         elif self._y < 0:
             self._y = 0
 
-        if self._x > w-16:
-            self._x = w-16
-        elif self._y > h-32:
-            self._y = h-32
-
+        if self._x > w - 16:
+            self._x = w - 16
+        elif self._y > h - 32:
+            self._y = h - 32
 
     def render(self, screen):
         screen.blit(self._image, (self._x, self._y))

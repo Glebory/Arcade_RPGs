@@ -33,11 +33,12 @@ def key_up(event, player):
     if event.key == pygame.K_w or event.key == pygame.K_s:
         player.y_change = 0
         player.weapon.y_change = 0
-        player.stop()
 
     if event.key == pygame.K_a or event.key == pygame.K_d:
         player.x_change = 0
         player.weapon.x_change = 0
+
+    if player.x_change == 0 and player.y_change == 0:
         player.stop()
 
     if event.key == pygame.K_UP:
