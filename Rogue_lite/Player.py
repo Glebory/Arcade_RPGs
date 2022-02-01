@@ -6,18 +6,18 @@ import pygame
 class Player(GameObject):
     def __init__(self, x, y, weapon):
         super().__init__(x, y)
-        self._imagesF = [pygame.image.load('images/Gimbo.png').convert_alpha()]
-        self._imagesF.append(pygame.image.load('images/Gimbo_FL.png').convert_alpha())
-        self._imagesF.append(pygame.image.load('images/Gimbo.png').convert_alpha())
-        self._imagesF.append(pygame.image.load('images/Gimbo_FR.png').convert_alpha())
+        self._imagesF = [pygame.image.load('images/characters/Gimbo/Gimbo.png').convert_alpha()]
+        self._imagesF.append(pygame.image.load('images/characters/Gimbo/Gimbo_FL.png').convert_alpha())
+        self._imagesF.append(pygame.image.load('images/characters/Gimbo/Gimbo.png').convert_alpha())
+        self._imagesF.append(pygame.image.load('images/characters/Gimbo/Gimbo_FR.png').convert_alpha())
 
-        self._imagesL = [pygame.image.load('images/Gimbo_L.png').convert_alpha()]
-        self._imagesR = [pygame.image.load('images/Gimbo_R.png').convert_alpha()]
-        self._imagesB = [pygame.image.load('images/Gimbo_B.png').convert_alpha()]
+        self._imagesL = [pygame.image.load('images/characters/Gimbo/Gimbo_L.png').convert_alpha()]
+        self._imagesR = [pygame.image.load('images/characters/Gimbo/Gimbo_R.png').convert_alpha()]
+        self._imagesB = [pygame.image.load('images/characters/Gimbo/Gimbo_B.png').convert_alpha()]
         self.images = self._imagesF
         self.image = self._images[self._index]
         self._weapon = weapon
-        self.speed = 0.3
+        self.speed = 0.6
 
     def mv_up(self):
         self.y_change = -self.speed
@@ -27,16 +27,21 @@ class Player(GameObject):
     def mv_down(self):
         self.y_change = self.speed
         self.weapon.y_change = self.speed
+        self.weapon.images = self.weapon.imagesF
         self.images = self._imagesF
 
     def mv_left(self):
         self.x_change = -self.speed
         self.weapon.x_change = -self.speed
+        self.weapon.images = self.weapon.imagesL
+        self.weapon.x_coord = self.x_coord -16
         self.images = self._imagesL
 
     def mv_right(self):
         self.x_change = self.speed
         self.weapon.x_change = self.speed
+        self.weapon.images = self.weapon.imagesR
+        self.weapon.x_coord = self.x_coord
         self.images = self._imagesR
 
     def attack_up(self):

@@ -4,6 +4,7 @@ import controls
 from Weapon import *
 from Player import *
 from Gui import *
+from enemy import *
 
 def game(height, width):
     pygame.init()
@@ -14,15 +15,16 @@ def game(height, width):
     window = pygame.display.set_mode(size)
     screen = pygame.Surface((640,480))
     pygame.display.set_caption("Rogue_lite")
-    icon = pygame.image.load('images/Heart.png')
+    icon = pygame.image.load('images/ui/Heart.png')
     pygame.display.set_icon(icon)
     clock = pygame.time.Clock()
     font = pygame.font.SysFont("Arial",11)
     weapon = Weapon(25,25)
 
     player = Player(25, 25, weapon)
-    objects = [player, weapon]
-    gui = Gui(screen, objects,640,480)
+    enemy = Enemy(100,100)
+    objects = [weapon, player, enemy]
+    gui = Gui(screen, objects,480,640)
 
     # Game Loop
     while True:

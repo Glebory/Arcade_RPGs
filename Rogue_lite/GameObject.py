@@ -14,6 +14,7 @@ class GameObject(pygame.sprite.Sprite):
         self._x_change = 0
         self._y_change = 0
         self._state = "stopped"
+        self._frames = 20
 
     def get_x(self):
         return self._x
@@ -93,6 +94,15 @@ class GameObject(pygame.sprite.Sprite):
 
     state = property(get_state, set_state)
 
+    def get_frames(self):
+        return self._frames
+
+    def set_frames(self, frames):
+        self._frames = frames
+        return
+
+    frames = property(get_frames, set_frames)
+
 
     def tick(self, h, w):
         self.x_coord += self._x_change
@@ -100,20 +110,20 @@ class GameObject(pygame.sprite.Sprite):
         if self.state == "moving":
             self.index += 1
 
-            if self.index >= len(self.images)*20:
+            if self.index >= len(self.images)*self.frames:
                 self.index = 0
 
-            self.image = self.images[self.index//20]
+            self.image = self.images[self.index//self.frames]
 
         if self._x < 0:
             self._x = 0
         elif self._y < 0:
             self._y = 0
 
-        if self._x > w:
-            self._x = w
-        elif self._y > h:
-            self._y = h
+        if self._x > w-16:
+            self._x = w-16
+        elif self._y > h-32:
+            self._y = h-32
 
 
     def render(self, screen):
