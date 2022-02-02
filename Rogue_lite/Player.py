@@ -4,20 +4,16 @@ from bullet import *
 import pygame
 
 class Player(GameObject):
-    def __init__(self, x, y, weapon):
+    def __init__(self, x, y, weapon, img_matrix, speed):
         super().__init__(x, y)
-        self._imagesF = [pygame.image.load('images/characters/Gimbo/Gimbo.png').convert_alpha()]
-        self._imagesF.append(pygame.image.load('images/characters/Gimbo/Gimbo_FL.png').convert_alpha())
-        self._imagesF.append(pygame.image.load('images/characters/Gimbo/Gimbo.png').convert_alpha())
-        self._imagesF.append(pygame.image.load('images/characters/Gimbo/Gimbo_FR.png').convert_alpha())
-
-        self._imagesL = [pygame.image.load('images/characters/Gimbo/Gimbo_L.png').convert_alpha()]
-        self._imagesR = [pygame.image.load('images/characters/Gimbo/Gimbo_R.png').convert_alpha()]
-        self._imagesB = [pygame.image.load('images/characters/Gimbo/Gimbo_B.png').convert_alpha()]
+        self._imagesF = img_matrix[0]
+        self._imagesL = img_matrix[1]
+        self._imagesR = img_matrix[2]
+        self._imagesB = img_matrix[3]
         self.images = self._imagesF
         self.image = self._images[self._index]
         self._weapon = weapon
-        self.speed = 0.6
+        self.speed = speed
         self.last_images = self._imagesF
 
     def mv_up(self):

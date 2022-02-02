@@ -1,9 +1,9 @@
 import pygame
 import sys
 import controls
-from Weapon import *
-from Player import *
+from all_characters import *
 from Gui import *
+from TileMap import *
 from enemy import *
 import random
 
@@ -22,11 +22,14 @@ def game(height, width):
     pygame.display.set_icon(icon)
     clock = pygame.time.Clock()
     font = pygame.font.SysFont("Arial",11)
-    weapon = Weapon(25,25, "G-Shot")
+    spawn = (25,25)
 
-    player = Player(25, 25, weapon)
-    enemy = Enemy(random.randint(0,size[0]-16),random.randint(0, size[1]-16))
-    objects = [weapon, player, enemy]
+    objects = []
+    player = gimbo(spawn[0], spawn[1], objects)
+    enemies = [Enemy(random.randint(0,size[0]-16),random.randint(0, size[1]-16)) for enemy in range(5) ]
+    objects = [player]
+    for enemy in enemies:
+        objects.append(enemy)
     gui = Gui(screen, objects,480,640)
     pygame.event.set_allowed([pygame.QUIT, pygame.KEYDOWN, pygame.KEYUP])
     # Game Loop
