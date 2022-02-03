@@ -15,22 +15,22 @@ class Player(GameObjects):
         self._direction = 1
         self._mass = 1
         self._velocity = 8
-        self._speed = 10
+        self._speed = 4
         self._weapon = pygame.sprite.Group()
         self._shot_direction = ""
-
+        self._counter = 0
 
     def __str__(self):
         return "%s" % self._position
 
     def attack(self):
-        if self._shot_direction == "R":
-            b = weapon.Weapon([self.position[0] + 40, self.position[1] + 18], 1)
-        if self._shot_direction == "L":
-            b = weapon.Weapon([self.position[0] + 40, self.position[1] + 18], -1)
-        if self._shot_direction == "U":
-            b = weapon.Weapon([self.position[0] + 40, self.position[1] - 18], -1)
-        self._weapon.add(b)
+        if self._counter == 0:
+            self._counter = 17
+            if self._shot_direction == "R":
+                shoot = weapon.Weapon([self.position[0] + 40, self.position[1] + 18], 1)
+            if self._shot_direction == "L":
+                shoot = weapon.Weapon([self.position[0] + 40, self.position[1] + 18], -1)
+            self._weapon.add(shoot)
 
     def move(self):
         self._xSpeed = 0
@@ -41,20 +41,18 @@ class Player(GameObjects):
             self._position[0] = 1100
         if self._right and not self._left:
             self._xSpeed = self._speed
-            self._direction = 1
         if self._left and not self._right:
             self._xSpeed -= self._speed
-            self._direction = -1
         self._position[0] += self._xSpeed
         self._position[1] += self._ySpeed
 
+
     def jump(self):
+        # 32
         force = (1 / 2) * self._mass * (self._velocity ** 2)
-        pressed = pygame.key.get_pressed()
-        if pressed[pygame.K_w]:
-            self._jump = True
         if self._jump:
             self._position[1] -= force
+            self._position[0] += 0.5
             self._velocity -= 1
             if self._velocity < 0:
                 self._mass = -1
@@ -62,5 +60,4 @@ class Player(GameObjects):
                 self._jump = False
                 self._velocity = 8
                 self._mass = 1
-
-        pygame.time.delay(100)
+        pygame.time.delay(20)
