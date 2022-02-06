@@ -3,6 +3,7 @@ import pygame
 import weapon
 from gameobjects import GameObjects
 from character import Character
+import health
 
 
 class Player(Character):
@@ -20,8 +21,10 @@ class Player(Character):
         self._velocity = 8
         self._speed = 4
         self._weapon = pygame.sprite.Group()
+        self._remaining_health = pygame.sprite.Group()
         self._shot_direction = ""
         self._counter = 0
+        self._max_health = 4
 
     def __str__(self):
         return "%s" % self._position
@@ -34,6 +37,25 @@ class Player(Character):
             if self._shot_direction == "L":
                 shoot = weapon.Weapon([self.rect.x + 40, self.rect.y + 18], -1)
             self._weapon.add(shoot)
+
+    def update_health(self, life):
+        origin = 30
+        for i in range(life):
+            heart_collection = health.Health([origin, 30])
+            origin += 60
+            self._remaining_health.add(heart_collection)
+
+
+    def add_health(self):
+        pass
+
+    def del_health(self):
+        #if self._max_health > 2:
+        self._remaining_health.empty()
+        self._max_health -= 1
+        print(self._max_health)
+        self.update_health(self._max_health)
+
 
     def move(self):
         self._xSpeed = 0

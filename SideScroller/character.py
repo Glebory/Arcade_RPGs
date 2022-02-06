@@ -5,6 +5,7 @@ class Character(GameObjects):
     def __init__(self, position, health):
         super().__init__(position)
         self._health = health
+        self._segment = 75
 
     def __str__(self):
         return "%s" % self._position
@@ -18,7 +19,7 @@ class Character(GameObjects):
         self._health = new_health
 
     def boundaries(self):
-        if self._position[0] <= 0:
-            self._position[0] = 0
-        elif self._position[0] >= 1100:
-            self._position[0] = 1100
+        if self.rect.x <= 0:
+            self.rect.x = 0
+        elif self.rect.x >= 1100:
+            self.rect.x = 1100

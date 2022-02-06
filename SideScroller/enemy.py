@@ -13,6 +13,10 @@ class Enemy(Character):
         self._direction = 1
         self._speed = 2
 
+
+    def __str__(self):
+        return "%s" % (self._position)
+
     def move(self):
         if self._direction == 1:
             if self.rect.x + self._speed <= self._position[0] + 80:
@@ -27,9 +31,7 @@ class Enemy(Character):
 
     def check_player_collision(self, player):
         if self.rect.colliderect(player):
-            player._health -= 25
-            print(player._health)
-
-
-    def __str__(self):
-        return "%s" % (self._position)
+            player._health -= 1
+            if player._health == self._segment:
+                self._segment -= 25
+                player.del_health()

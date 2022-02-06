@@ -2,18 +2,19 @@ import player
 import enemy
 import pygame
 import weapon
+import health
 
 class Game:
-
     def __init__(self):
         pygame.init()
         self.window = pygame.display.set_mode((1160, 610))
         self._clock = pygame.time.Clock()
         self._player1 = player.Player([500, 500], 100)
+        self._player1.update_health(self._player1._max_health)
         self._enemy1 = enemy.Enemy([750, 475], 100)
         self._state = False
-        self._enemies = pygame.sprite.Group()
-
+        self._cooldown = 10000
+        self._pause = pygame.time.get_ticks()
 
     def game_loop(self):
         game_loop = True
@@ -22,20 +23,23 @@ class Game:
                 self._player1._counter -= 1
             self.window.fill((100, 100, 100))
 
-            if self._enemy1._health > 0 and self._player1._health > 0:
+            if self._player1.health > 0:
                 self.window.blit(self._player1.image, self._player1.rect)
                 self._player1.move()
                 self._player1.jump()
+                self._player1._remaining_health.draw(self.window)
+
+
+            if self._enemy1._health > 0:
                 self.window.blit(self._enemy1.image, self._enemy1.rect)
                 self._enemy1.move()
                 self._enemy1.check_player_collision(self._player1)
-            
+
             if self._state == True:
                 self._player1.attack()
 
             self._player1._weapon.update(self._enemy1)
             self._player1._weapon.draw(self.window)
-
 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -68,9 +72,9 @@ class Game:
                     if event.key == pygame.K_LEFT:
                         self._state = False
 
-            self._clock.tick(60)
+            self._clock.tick(70)
             pygame.display.update()
-        #    print(self._clock)
+            print(self._clock)
 
         pygame.quit()
 
