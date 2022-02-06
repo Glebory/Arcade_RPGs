@@ -1,7 +1,6 @@
 import pygame
 from gameobjects import GameObjects
 
-
 class Weapon(GameObjects):
     def __init__(self, position, target):
         super().__init__(position)
@@ -13,7 +12,10 @@ class Weapon(GameObjects):
         self.rect = self.image.get_rect()
         self.rect.center = (self.position[0], self.position[1])
 
-    def update(self):
+    def update(self, enemy):
         self.rect.x += self._speed * self._target
         if self.rect.right <= 0 or self.rect.left >= 1160:
+            self.kill()
+        if self.rect.colliderect(enemy):
+            enemy._health -= 25
             self.kill()
