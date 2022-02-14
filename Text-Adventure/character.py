@@ -1,4 +1,7 @@
-import inventory
+import inventory as inv
+import created_items as ci
+import item
+import spells
 
 
 class Character:
@@ -13,7 +16,7 @@ class Character:
         self._level = level
         self._total_health = health
         self._current_health = self._total_health
-        self._strength = self._level * 1.5
+        self._strength = self._level * 2
         self._total_mana = self._level * 5
         self._current_mana = self._total_mana
         self._resistances = []
@@ -107,9 +110,53 @@ class Character:
 
 class Player_swordsman(Character):
     # either the only player option or one of many, bard, mage, etc
-    def __init__(self, name, level, health, resistances=[]):
+    def __init__(self, name, level, health, weapon, armour, resistances=[]):
         super().__init__(name, level, health)
         self._resistances = ["Melee"]
+        self._weapon = weapon
+        self._armour = armour
+        self._inv = inv.Inventory()
+        self._spells = []
+
+    def get_weapon(self):
+        return self._weapon
+
+    def set_weapon(self, weapon):
+        self._weapon = weapon
+
+    def get_armour(self):
+        return self._armour
+
+    def set_armour(self, armour):
+        self._armour = armour
+
+    def get_inventory(self):
+        return self._inv
+
+    def add_item(self, item):
+        self._inv.add(item)
+
+    def remove_item(self, item):
+        self._inv.remove(item)
+
+    def get_spells(self):
+        return self._spells
+
+    def add_spell(self, spell):
+        if spell not in self._spells:
+            self._spells.append(spell)
 
 
-knight1 = Player_swordsman("Bertrand", 1, 10)
+
+knight1 = Player_swordsman("Bertrand", 1, 10, ci.longsword, ci.cloth_armour)
+knight1.add_item(ci.stick)
+knight1.add_item(ci.heal_potion)
+knight1.add_item(ci.heal_potion)
+knight1.add_item(ci.heal_potion)
+knight1.add_item(ci.bomb)
+knight1.add_item(ci.bomb)
+knight1.add_item(ci.str_tonic)
+knight1.add_item(ci.fire_resist)
+
+
+
