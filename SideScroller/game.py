@@ -3,6 +3,10 @@ import enemy
 import pygame
 import weapon
 import health
+import tiles
+import tilemap
+import leveldesign
+
 
 class Game:
     def __init__(self):
@@ -15,20 +19,28 @@ class Game:
         self._state = False
         self._cooldown = 10000
         self._pause = pygame.time.get_ticks()
+        self._tilemap = tilemap.TileMap()
+        self._tilemap.parse_data(self._tilemap._map)
+
+    #    s = levelsprites.LevelSprites("images/black-ground.png")
+    #    self._level = tilemap.TileMap("alpha.csv", s)
 
     def game_loop(self):
         game_loop = True
         while game_loop:
             if self._player1._counter > 0:
                 self._player1._counter -= 1
-            self.window.fill((100, 100, 100))
+            self.window.fill((48, 51, 53))
+            self._tilemap.draw()
+            for tile in self._tilemap._items:
+                self.window.blit(tile[0], tile[1])
+            #self._level.draw(self.window)
 
             if self._player1.health > 0:
                 self.window.blit(self._player1.image, self._player1.rect)
                 self._player1.move()
                 self._player1.jump()
                 self._player1._remaining_health.draw(self.window)
-
 
             if self._enemy1._health > 0:
                 self.window.blit(self._enemy1.image, self._enemy1.rect)
@@ -72,6 +84,7 @@ class Game:
                     if event.key == pygame.K_LEFT:
                         self._state = False
 
+            #self._level.draw(self.window)
             self._clock.tick(70)
             pygame.display.update()
             print(self._clock)
