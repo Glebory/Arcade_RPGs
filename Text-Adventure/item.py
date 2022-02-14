@@ -116,6 +116,20 @@ class HealthGiver(Consumable):
         return"%s - Restores %i health: %s" % (self._name, self._points, self._description)
 
 
+class ManaGiver(Consumable):
+    """
+    A class to create consumable items which restore a character's mana.
+    """
+    def __init__(self, name, description, value, points):
+        Consumable.__init__(self, name, description, value, points)
+
+    def consume(self, character):
+        character.gain_mana(self._points)
+
+    def __str__(self):
+        return"%s - Restores %i mana: %s" % (self._name, self._points, self._description)
+
+
 class TemporaryBuffer(Consumable):
     """
     A class to create consumable items which give a character a temporary bonus
@@ -139,9 +153,13 @@ class StrengthGiver(TemporaryBuffer):
         TemporaryBuffer.__init__(self, name, description, value, points, turns)
 
     def consume(self, character):
-        character._strength += self._points
-        # code isnt correct/finished need to figure out turn count in combat will work and
-        # how to give strength stat to a char (char.give_strength function?)
+        old_strength = character.get_strength()
+        character.set_strength(old_strength + self._points)
+        return self._turns
+
+    def timeout(self, character):
+        old_strength = character.get_strength()
+        character.set_strength(old_strength - self._points)
 
     def __str__(self):
         return"%s - Gives %i strength for %i turns: %s" % (self._name, self._points,
@@ -162,9 +180,13 @@ class ResistanceGiver(TemporaryBuffer):
         return self._resistance
 
     def consume(self, character):
-        character._resistances.append(self._resistance)
-        # same issues as StrengthGiver
+        character.give_resistance(self._resistance)
+        return self._turns
+
+    def timeout(self, character):
+        character.remove_resistance(self._resistance)
 
     def __str__(self):
         return "%s - Gives %s resist for %i turns: %s" % (self._name, self._resistance,
                                                           self._turns, self._description)
+
