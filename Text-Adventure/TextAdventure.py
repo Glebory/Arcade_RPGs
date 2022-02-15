@@ -16,7 +16,10 @@ ui_manager.set_focus_set(text_entry)
 
 clock = pygame.time.Clock()
 
-movement = ["go", "move", "exit", "leave", "travel", "walk"]
+# keywords for moving between scenes
+movement = ("go", "move", "exit", "leave", "travel", "walk")
+# keywords for interacting with scene objects
+action = ("talk", "fight", "search", "take")
 
 scenes = [s1.SceneOne(), s2.SceneTwo()]
 current_scene = s1.SceneOne()
@@ -26,25 +29,52 @@ def process_input(input_text):
     global output_text
     input_words = input_text.split()
     command = input_words[0]
+    # action within a scene
+    if command in action:
+        if command == "search":
+            sceneObjects = current_scene.get_objects()
+            if len(sceneObjects) == 0:
+                output_text = "You look around but don't find anything interesting.<br>"
+                return
+            output_text = "You can see: <br>"
+            for obj in sceneObjects:
+                output_text += obj.get_name() + " - " + obj.get_description() + "<br>"
 
-    if len(input_words) > 1:
-        # Movement between scenes
-        direction = input_words[1]
-        exits = current_scene.get_exits()
-        if (command in movement) and (direction in exits):
-            exitName = exits.get(direction)
-            if exitName is not None:
-                for scene in scenes:
-                    if exitName == scene.get_name():
-                        current_scene = scene
-                        output_text = current_scene.get_description()
+        if command == "talk":
+            npcs = current_scene.get_npcs()
+            if len(npcs) == 0:
+                output_text = "There is nobody to talk to here. <br>"
+                return
+            if len(input_words) > 1:
+                target = input_words[1]
+                if target in npcs:
+                    output_text = npcs[target]
+
+    # Movement between scenes
+    if command in movement:
+        if len(input_words) > 1:
+            direction = input_words[1]
+            exits = current_scene.get_exits()
+            locations = current_scene.get_locations()
+            if direction in exits:
+                exitName = exits.get(direction)
+                if exitName is not None:
+                    for scene in scenes:
+                        if exitName == scene.get_name():
+                            current_scene = scene
+                            output_text = current_scene.get_description()
+            elif direction in locations:
+                output_text = locations[direction]
+            else:
+                output_text = "There is no exit there! <br>"
         else:
-            output_text = "There is no exit there! <br>"
+            output_text = command + " where? <br>"
 
 def main():
+    global output_text
+    started = True
     running = True
     time_delta = clock.tick(60) / 1000.0
-    started = True
 
     while running:
         for event in pygame.event.get():
@@ -62,8 +92,9 @@ def main():
                     continue
 
                 process_input(event.text.lower())
-
                 textbox.append_html_text(output_text)
+                output_text = ""
+
         ui_manager.update(time_delta)
         ui_manager.draw_ui(screen)
         pygame.display.flip()
