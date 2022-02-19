@@ -19,6 +19,9 @@ class Scene:
     def get_objects(self):
         return self._objects
 
+    def remove_object(self, item):
+        self._objects.remove(item)
+
     def get_locations(self):
         return self._locations
 

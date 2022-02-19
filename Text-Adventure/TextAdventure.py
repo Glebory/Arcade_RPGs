@@ -1,8 +1,10 @@
 import pygame
 import pygame_gui
+from character import *
 
 import scene_one as s1
 import scene_two as s2
+import forest_scenes as fs
 
 pygame.init()
 screen = pygame.display.set_mode((640, 480))
@@ -21,8 +23,10 @@ movement = ("go", "move", "exit", "leave", "travel", "walk")
 # keywords for interacting with scene objects
 action = ("talk", "fight", "search", "take")
 
-scenes = [s1.SceneOne(), s2.SceneTwo()]
+scenes = [s1.SceneOne(), s2.SceneTwo(), fs.SceneForestOne()]
 current_scene = s1.SceneOne()
+#if we add other classes easier to assign as player. this is for picling up items etc
+player = knight1
 
 def process_input(input_text):
     global current_scene
@@ -49,6 +53,21 @@ def process_input(input_text):
                 target = input_words[1]
                 if target in npcs:
                     output_text = npcs[target]
+        
+        if command == "take":
+                if len(input_words) > 1:
+                    target_object = input_words[1].lower()
+                    objects = current_scene.get_objects()
+                    for item in objects:
+                        if target_object == item.get_name().lower():
+                            knight1.add_item(item)
+                            output_text = "You got a " + target_object + "!<br>"
+                            current_scene.remove_object(item)
+                        else:
+                            output_text = "That item isn't here! <br>"
+                else:
+                    output_text = command + " what? <br>"
+
 
     # Movement between scenes
     if command in movement:
