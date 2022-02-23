@@ -6,6 +6,7 @@ import inventory
 import scene_one as s1
 import scene_two as s2
 import forest_scenes as fs
+import dungeon_scenes as ds
 
 pygame.init()
 screen = pygame.display.set_mode((640, 480))
@@ -24,7 +25,9 @@ movement = ("go", "move", "exit", "leave", "travel", "walk")
 # keywords for interacting with scene objects
 action = ("talk", "fight", "search", "take", "inventory", "items")
 
-scenes = [s1.SceneOne(), s2.SceneTwo(), fs.SceneForestOne()]
+scenes = [s1.SceneOne(), s2.SceneTwo(), fs.SceneForestOne(), ds.SceneDungeonOne(),
+          ds.SceneDungeonTwo(), ds.SceneDungeonThree(), ds.SceneDungeonFour(),
+          ds.SceneDungeonFive(), ds.SceneDungeonSix(), ds.SceneDungeonSeven()]
 current_scene = s1.SceneOne()
 #if we add other classes easier to assign as player. this is for picling up items etc
 player = knight1
