@@ -10,7 +10,7 @@ import math
 
 '''
 stuff to do:
-    enemy ai
+    pygame gui integration
 '''
 
 player_buffs = {}
@@ -84,10 +84,10 @@ def attack(attacker, defender):
         damage_type = attacker.get_weapon().get_bonus()
     else:
         base_damage = attacker.get_strength() - defender.get_armour().get_defense()
-        if base_damage < 1:
-            base_damage = 1
         damage_type = None
     damage = damageChecker(base_damage, damage_type, defender)
+    if damage < 1:
+        damage = 1
     defender.take_damage(damage)
     print("%s attacks, %s takes %i damage" % (attacker, defender, damage))
 
@@ -123,9 +123,15 @@ def playerAction(player, enemy):
                 damage = damageChecker(chosen_spell.get_damage(), chosen_spell.get_damage_type(), enemy)
                 enemy.take_damage(damage)
                 print("%s %s, dealing %i damage to %s" % (player, chosen_spell.get_flavour_text(), damage, enemy))
+            elif isinstance(chosen_spell, s.StrengthDeBuff):
+                if chosen_spell not in enemy_buffs:
+                    chosen_spell.cast(enemy)
+                enemy_buffs[chosen_spell] = chosen_spell.get_turns()
+                print("%s %s" % (player, chosen_spell.get_flavour_text()))
             elif isinstance(chosen_spell, s.TimedSpell):
-                spell_turns = chosen_spell.cast(player)
-                player_buffs[chosen_spell] = spell_turns
+                if chosen_spell not in player_buffs:
+                    chosen_spell.cast(player)
+                player_buffs[chosen_spell] = chosen_spell.get_turns()
                 print("%s %s" % (player, chosen_spell.get_flavour_text()))
             else:
                 chosen_spell.cast(player)
@@ -174,9 +180,9 @@ def playerAction(player, enemy):
             item_turns = chosen_item.consume(player)
             player_buffs[chosen_item] = item_turns
             print("%s drinks their %s, gaining %i strength for %i turns" % (player,
-                                                                              chosen_item.get_name(),
-                                                                              chosen_item.get_points(),
-                                                                              chosen_item.get_turns()))
+                                                                            chosen_item.get_name(),
+                                                                            chosen_item.get_points(),
+                                                                            chosen_item.get_turns()))
         player.get_inventory().remove(chosen_item)
 
     else:
@@ -185,12 +191,38 @@ def playerAction(player, enemy):
 
 
 def enemyAction(player, enemy):
-    # wip, there should be a list of actions the enemy can do and there's a percent chance for each
-    # just doing attack for now until we sort out spell lists and inventories
-    attack(enemy, player)
+    # 50/50 chance to attack or use a spell
+    choice = random.randint(0, 1)
+    if choice == 0:
+        attack(enemy, player)
+    else:
+        # equal chance for each spell
+        spell_list = enemy.get_spell_list()
+        spell_choice = random.randint(0, len(spell_list) - 1)
+        # picks spell at random from its own list
+        chosen_spell = spell_list[spell_choice]
+        if isinstance(chosen_spell, a.Attacks):
+            damage = damageChecker(chosen_spell.get_damage(), chosen_spell.get_damage_type(), player)
+            player.take_damage(damage)
+            print("%s %s, dealing %i damage to %s" % (enemy, chosen_spell.get_flavour_text(), damage, player))
+        elif isinstance(chosen_spell, s.StrengthDeBuff):
+            # only casts if not already buffed or debuffed, as otherwise
+            # it would cause strength to not be put back to normal
+            if chosen_spell not in player_buffs:
+                chosen_spell.cast(player)
+            player_buffs[chosen_spell] = chosen_spell.get_turns()
+            print("%s %s" % (enemy, chosen_spell.get_flavour_text()))
+        elif isinstance(chosen_spell, s.TimedSpell):
+            if chosen_spell not in enemy_buffs:
+                chosen_spell.cast(enemy)
+            enemy_buffs[chosen_spell] = chosen_spell.get_turns()
+            print("%s %s" % (enemy, chosen_spell.get_flavour_text()))
+        else:
+            chosen_spell.cast(enemy)
+            print("%s %s" % (enemy, chosen_spell.get_flavour_text()))
 
 
-# overall combat function. makes use of lots of functions
+# overall combat function. makes use of lots of above functions
 def combat(player, enemy):
     turn_count = 0
     # checks if player wants to flee
@@ -201,6 +233,7 @@ def combat(player, enemy):
         # both alive
         if player.get_current_health() > 0 and enemy.get_current_health() > 0:
             turn_count += 1
+            print(player_buffs)
             # info, will probably be changed for pygame version rather than just printing
             print("%s HP: %i / %i" % (player, player.get_current_health(), player.get_total_health()))
             print("%s Mana: %i / %i" % (player, player.get_current_mana(), player.get_total_mana()))
@@ -237,14 +270,13 @@ def combat(player, enemy):
 
 
 """
-slime = Slime(1, 8)
-zombie = Zombie(1, 20)
-mimic = Mimic(1, 20)
+bite = a.Melee("Bite", "bites", 5)
 minorheal = s.Heal("Minor Healing", 10, 5)
 fireball = a.Fire("Fireball", "casts a fireball", 10, 5)
 fireres = s.ResistanceBuff("Flame Body", None, 5, 3, "Fire")
 strup = s.StrengthBuff("Bulk", 3, 5, 3)
 strdown = s.StrengthDeBuff("Weaken", 3, 5, 3)
+mimic = Mimic(1, 20, [bite, strup])
 knight1.add_spell(minorheal)
 knight1.add_spell(fireball)
 knight1.add_spell(fireres)

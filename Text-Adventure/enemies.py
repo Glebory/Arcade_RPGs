@@ -1,22 +1,31 @@
 from character import *
 
 
-class Slime(Character):
+class Enemy(Character):
+    def __init__(self, name, level, health, spell_list):
+        super().__init__(name, level, health)
+        self._spell_list = spell_list
+
+    def get_spell_list(self):
+        return self._spell_list
+
+
+class Slime(Enemy):
     # basic slime, no resistances or weaknesses
-    def __init__(self, level, health):
-        super().__init__("Slime", level, health)
+    def __init__(self, level, health, spell_list):
+        super().__init__("Slime", level, health, spell_list)
 
 
-class Zombie(Character):
+class Zombie(Enemy):
     # basic zombie, weak to fire
-    def __init__(self, level, health):
-        super().__init__("Zombie", level, health)
+    def __init__(self, level, health, spell_list):
+        super().__init__("Zombie", level, health, spell_list)
         self._weaknesses = ["Fire"]
 
 
-class Mimic(Character):
+class Mimic(Enemy):
     # chest brought to life, resists melee but weak to fire
-    def __init__(self, level, health):
-        super().__init__("Mimic", level, health)
+    def __init__(self, level, health, spell_list):
+        super().__init__("Mimic", level, health, spell_list)
         self._resistances = ["Melee"]
         self._weaknesses = ["Fire"]
