@@ -1,4 +1,5 @@
 import scene
+import npc
 
 class SceneOne(scene.Scene):
     def __init__(self):
@@ -10,7 +11,7 @@ class SceneOne(scene.Scene):
         self._exits["north"] = "forest1"
         self._objects = []
         self._locations = {"window": "You peek through the window and find a tree.<br>"}
-        self._npcs = {}
+        self._npcs = {"merchant": npc.merchant}
 
     def get_name(self):
         return super().get_name()

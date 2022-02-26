@@ -158,5 +158,11 @@ knight1.add_item(ci.bomb)
 knight1.add_item(ci.str_tonic)
 knight1.add_item(ci.fire_resist)
 
+knight1.add_item(ci.coin)
+knight1.add_item(ci.coin)
+knight1.add_item(ci.coin)
+knight1.add_item(ci.coin)
+knight1.add_item(ci.coin)
+
 
 

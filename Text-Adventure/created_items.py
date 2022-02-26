@@ -1,5 +1,7 @@
 from item import *
 
+coin = Item("Coin", "A round coin made from some metal", 1)
+
 stick = Item("Stick", "A stick from a tree branch", 1)
 
 longsword = Weapon("Longsword", "A sharp sword made from steel", 5, "Melee", 3)

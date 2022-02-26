@@ -2,6 +2,7 @@ import pygame
 import pygame_gui
 from character import *
 import inventory
+import npc
 
 import scene_one as s1
 import scene_two as s2
@@ -24,6 +25,7 @@ clock = pygame.time.Clock()
 movement = ("go", "move", "exit", "leave", "travel", "walk")
 # keywords for interacting with scene objects
 action = ("talk", "fight", "search", "take", "inventory", "items")
+trading = ("buy", "sell", "browse")
 
 scenes = [s1.SceneOne(), s2.SceneTwo(), fs.SceneForestOne(), ds.SceneDungeonOne(),
           ds.SceneDungeonTwo(), ds.SceneDungeonThree(), ds.SceneDungeonFour(),
@@ -58,34 +60,72 @@ def process_input(input_text):
             if len(input_words) > 1:
                 target = input_words[1]
                 if target in npcs:
-                    output_text = npcs[target]
+                    output_text = npcs[target].get_speech()
         
         if command == "take":
-            if len(input_words) > 1:
-                target_object = input_words[1].lower()
-                objects = current_scene.get_objects()
-                for item in objects:
-                    if target_object == item.get_name().lower():
-                        knight1.add_item(item)
-                        output_text = "You got a " + target_object + "!<br>"
-                        current_scene.remove_object(item)
-                    else:
-                        output_text = "That item isn't here! <br>"
+            target_object = ""
+            if len(input_words) == 2:
+                target_object = input_words[1]
+            if len(input_words) > 2:
+                for word in input_words:
+                    if word == input_words[0]:
+                        continue
+                    target_object += word + " "
+                target_object = target_object.rstrip()
+            objects = current_scene.get_objects()
+            for item in objects:
+                if target_object == item.get_name().lower():
+                    player.add_item(item)
+                    output_text = "You got a " + target_object + "!<br>"
+                    current_scene.remove_object(item)
+                else:
+                    output_text = "That item isn't here! <br>"
             else:
                 output_text = command + " what? <br>"
 
         if command == "items" or command == "inventory":
             output_text = "You are wearing: <br>"
-            output_text += str(knight1.get_weapon()) + "<br>"
-            output_text += str(knight1.get_armour()) + "<br>"
-            inv = knight1.get_inventory()
+            output_text += str(player.get_weapon()) + "<br>"
+            output_text += str(player.get_armour()) + "<br>"
+            inv = player.get_inventory()
             output_text += "You have: <br>"
+            for weapon in inv.get_weapons().values():
+                output_text += str(weapon[0]) + ". Amount: " + str(weapon[1]) + "<br>"
+            for armour in inv.get_armour().values():
+                output_text += str(armour[0]) + ". Amount: " + str(armour[1]) + "<br>"
             for throwable in inv.get_throwables().values():
                 output_text += str(throwable[0]) + ". Amount: " + str(throwable[1]) + "<br>"
             for consumable in inv.get_consumables().values():
                 output_text += str(consumable[0]) + ". Amount: " + str(consumable[1]) + "<br>"
             for other in inv.get_other().values():
                 output_text += str(other[0]) + ". Amount: " + str(other[1]) + "<br>"
+
+    if command in trading:
+        trader = current_scene.get_npcs()["merchant"]
+        if command == "browse":
+            output_text += trader.merchant_browse()
+        if command == "buy":
+            item = ""
+            if len(input_words) == 2:
+                item = input_words[1]
+            if len(input_words) > 2:
+                for word in input_words:
+                    if word == input_words[0]:
+                        continue
+                    item += word + " "
+                item = item.rstrip()
+            output_text = trader.buy_from_merchant(item, player)
+        if command == "sell":
+            item = ""
+            if len(input_words) == 2:
+                item = input_words[1]
+            if len(input_words) > 2:
+                for word in input_words:
+                    if word == input_words[0]:
+                        continue
+                    item += word + " "
+                item = item.rstrip()
+            output_text = trader.sell_to_merchant(item, player)
 
     # Movement between scenes
     if command in movement:
@@ -107,6 +147,7 @@ def process_input(input_text):
         else:
             output_text = command + " where? <br>"
 
+
 def main():
     global output_text
     started = True
@@ -125,7 +166,6 @@ def main():
                     playername = event.text
                     started = False
                     textbox.append_html_text("Welcome, " + playername + "<br>")
-                    player = Player_swordsman(playername, 1, 10, ci.longsword, ci.cloth_armour)
                     textbox.append_html_text(current_scene.get_description())
                     continue
 
