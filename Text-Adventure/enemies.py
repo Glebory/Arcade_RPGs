@@ -1,4 +1,6 @@
 from character import *
+import attacks as a
+import spells as s
 
 
 class Enemy(Character):
@@ -29,3 +31,8 @@ class Mimic(Enemy):
         super().__init__("Mimic", level, health, spell_list)
         self._resistances = ["Melee"]
         self._weaknesses = ["Fire"]
+
+
+zombie = Zombie(1, 12, [a.bite])
+slime = Slime(2, 10, [a.spit])
+mimic = Mimic(2, 20, [a.bite, a.spit])
