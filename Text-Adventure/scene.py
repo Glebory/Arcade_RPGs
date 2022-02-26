@@ -6,6 +6,7 @@ class Scene:
         self._objects = []
         self._locations = {}
         self._npcs = {}
+        self._enemy = None
 
     def get_name(self):
         return self._name
@@ -27,3 +28,9 @@ class Scene:
 
     def get_npcs(self):
         return self._npcs
+
+    def get_enemy(self):
+        return self._enemy
+
+    def remove_enemy(self):
+        self._enemy = None
