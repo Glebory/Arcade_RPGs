@@ -1,4 +1,5 @@
 import scene
+import enemies as e
 
 
 class SceneDungeonOne(scene.Scene):
@@ -13,7 +14,8 @@ class SceneDungeonOne(scene.Scene):
         self._exits["north"] = "dungeon2"
         self._objects = []
         self._locations = {}
-        self._npcs = {}  # enemy here?
+        self._npcs = {}
+        self._enemy = None
 
 
 class SceneDungeonTwo(scene.Scene):
@@ -30,6 +32,7 @@ class SceneDungeonTwo(scene.Scene):
         self._objects = []
         self._locations = {"door": "The giant stone door is locked shut. Only a key could open it.<br>"}
         self._npcs = {}  # enemy here?
+        self._enemy = e.zombie
 
 
 class SceneDungeonThree(scene.Scene):
@@ -44,6 +47,7 @@ class SceneDungeonThree(scene.Scene):
         self._objects = []
         self._locations = {}
         self._npcs = {}  # enemy here?
+        self._enemy = e.slime
 
 
 class SceneDungeonFour(scene.Scene):
@@ -57,7 +61,8 @@ class SceneDungeonFour(scene.Scene):
         self._exits["west"] = "dungeon2"
         self._objects = []
         self._locations = {}
-        self._npcs = {}  # enemy here?
+        self._npcs = {}
+        self._enemy = None
 
 
 class SceneDungeonFive(scene.Scene):
@@ -70,7 +75,8 @@ class SceneDungeonFive(scene.Scene):
         self._objects = []
         self._locations = {"right": "This chest has seen some wear and tear. There is an odd smell coming from it.",
                            "left": "This chest is rather dusty. It hasn't been touched in a while."}
-        self._npcs = {}  # enemy here (mimic chest) ?
+        self._npcs = {}
+        self._enemy = None
 
 
 class SceneDungeonSix(scene.Scene):
@@ -86,6 +92,7 @@ class SceneDungeonSix(scene.Scene):
                                     " see a rusty key.",
                            "barrels": "Wooden storage barrels, built to last."}
         self._npcs = {}
+        self._enemy = None
 
 
 class SceneDungeonSeven(scene.Scene):
@@ -97,4 +104,5 @@ class SceneDungeonSeven(scene.Scene):
         self._exits["south"] = "dungeon4"
         self._objects = []
         self._locations = {"chest": "A fine looking chest with hints of gold in its design."}
-        self._npcs = {}  # enemy here?
+        self._npcs = {}
+        self._enemy = None
