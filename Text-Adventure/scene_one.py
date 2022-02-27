@@ -6,9 +6,11 @@ class SceneOne(scene.Scene):
         super().__init__()
         self._name = "scene1"
         self._description = "You find yourself in a small and empty room. There is a door in the <u>South</u> wall with a " \
-                            "<u>window</u> next to it. There is also a hole in the wall to the <u>North</u>. <br>"
+                            "<u>window</u> next to it. There is also a hole in the wall to the <u>North</u>. "\
+                            "To your <u>East</u> there are stairs leading underground. <br>"
         self._exits["south"] = "scene2"
         self._exits["north"] = "forest1"
+        self._exits["east"] = "dungeon1"
         self._objects = []
         self._locations = {"window": "You peek through the window and find a tree.<br>"}
         self._npcs = {"merchant": npc.merchant}
