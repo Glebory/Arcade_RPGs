@@ -3,6 +3,8 @@ import pygame_gui
 from character import *
 import inventory
 import npc
+import combat as c
+import enemies as e
 
 import scene_one as s1
 import scene_two as s2
@@ -140,6 +142,17 @@ def process_input(input_text):
                         if exitName == scene.get_name():
                             current_scene = scene
                             output_text = current_scene.get_description()
+                            if current_scene.get_enemy():
+                                outcome = c.combat(player, current_scene.get_enemy(), ui_manager, screen)
+                                ui_manager.set_focus_set(text_entry)
+                                if outcome == "FLEE":
+                                    current_scene = s1.SceneOne()
+                                    output_text = "You escape the area...<br>"
+                                elif outcome == "LOSE":
+                                    output_text = "Game Over<br>"
+                                    # game over stuff (client closes?)
+                                else:
+                                    current_scene.remove_enemy()
             elif direction in locations:
                 output_text = locations[direction]
             else:
