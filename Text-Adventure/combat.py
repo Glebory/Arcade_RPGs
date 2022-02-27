@@ -7,14 +7,13 @@ import spells as s
 import attacks as a
 import random
 import math
-
-'''
-stuff to do:
-    pygame gui integration
-'''
+import pygame
+import pygame_gui
 
 player_buffs = {}
 enemy_buffs = {}
+clock = pygame.time.Clock()
+time_delta = clock.tick(60) / 1000.0
 
 
 # checks if a buff's time has ran out
@@ -68,16 +67,24 @@ def damageChecker(damage, damage_type, character):
 
 
 # takes input and checks if its part of the given command list
-def playerInput(command_list):
+def playerInput(command_list, ui_manager, screen, textbox, text_entry):
     while True:
-        player_command = (input(" > ")).upper()
-        if player_command in command_list:
-            return player_command
-        print("Please select a valid action!")
+        for event in pygame.event.get():
+            ui_manager.process_events(event)
+            if event.type == pygame_gui.UI_TEXT_ENTRY_FINISHED:
+                textbox.append_html_text("> " + event.text + "<br>")
+                text_entry.set_text("")
+                if event.text.upper() in command_list:
+                    return event.text.upper()
+                else:
+                    textbox.append_html_text("Please select a valid action!<br>")
+        ui_manager.update(time_delta)
+        ui_manager.draw_ui(screen)
+        pygame.display.flip()
 
 
 # calculates overall damage when a character attacks its enemy
-def attack(attacker, defender):
+def attack(attacker, defender, textbox):
     # change when there is more classes
     if isinstance(attacker, Player_swordsman):
         base_damage = attacker.get_strength() + attacker.get_weapon().get_attack()
@@ -89,17 +96,17 @@ def attack(attacker, defender):
     if damage < 1:
         damage = 1
     defender.take_damage(damage)
-    print("%s attacks, %s takes %i damage" % (attacker, defender, damage))
+    textbox.append_html_text("%s attacks, %s takes %i damage<br>" % (attacker, defender, damage))
 
 
 # takes input from the player
-def playerAction(player, enemy):
-    action = playerInput(["ATTACK", "SPELL", "ITEM", "FLEE"])
+def playerAction(player, enemy, ui_manager, screen, textbox, text_entry):
+    action = playerInput(["ATTACK", "SPELL", "ITEM", "FLEE"], ui_manager, screen, textbox, text_entry)
     if action == "ATTACK":
-        attack(player, enemy)
+        attack(player, enemy, textbox)
 
     elif action == "SPELL":
-        print("Choose a spell from:")
+        textbox.append_html_text("Choose a spell from:<br>")
         choices = []
         spell_reference = []
         # sets list of spells up for use in playerInput(), with names in upper case
@@ -107,8 +114,8 @@ def playerAction(player, enemy):
             name = spell.get_name().upper()
             choices.append(name)
             spell_reference.append([name, spell])
-        print(choices)
-        chosen_spell_str = playerInput(choices)
+        textbox.append_html_text("%s<br>" % choices)
+        chosen_spell_str = playerInput(choices, ui_manager, screen, textbox, text_entry)
         chosen_spell = ""
 
         # finds chosen spell
@@ -122,27 +129,28 @@ def playerAction(player, enemy):
             if isinstance(chosen_spell, a.Attacks):
                 damage = damageChecker(chosen_spell.get_damage(), chosen_spell.get_damage_type(), enemy)
                 enemy.take_damage(damage)
-                print("%s %s, dealing %i damage to %s" % (player, chosen_spell.get_flavour_text(), damage, enemy))
+                textbox.append_html_text(
+                    "%s %s, dealing %i damage to %s<br>" % (player, chosen_spell.get_flavour_text(), damage, enemy))
             elif isinstance(chosen_spell, s.StrengthDeBuff):
                 if chosen_spell not in enemy_buffs:
                     chosen_spell.cast(enemy)
                 enemy_buffs[chosen_spell] = chosen_spell.get_turns()
-                print("%s %s" % (player, chosen_spell.get_flavour_text()))
+                textbox.append_html_text("%s %s<br>" % (player, chosen_spell.get_flavour_text()))
             elif isinstance(chosen_spell, s.TimedSpell):
                 if chosen_spell not in player_buffs:
                     chosen_spell.cast(player)
                 player_buffs[chosen_spell] = chosen_spell.get_turns()
-                print("%s %s" % (player, chosen_spell.get_flavour_text()))
+                textbox.append_html_text("%s %s<br>" % (player, chosen_spell.get_flavour_text()))
             else:
                 chosen_spell.cast(player)
-                print("%s %s" % (player, chosen_spell.get_flavour_text()))
+                textbox.append_html_text("%s %s<br>" % (player, chosen_spell.get_flavour_text()))
             player.use_mana(chosen_spell.get_mana_cost())
         # not enough mana -> spell fails
         else:
-            print("%s doesn't have enough mana to cast %s" % (player, chosen_spell.get_name()))
+            textbox.append_html_text("%s doesn't have enough mana to cast %s<br>" % (player, chosen_spell.get_name()))
 
     elif action == "ITEM":
-        print("Choose an item from:")
+        textbox.append_html_text("Choose an item from:<br>")
         throwables = player.get_inventory().get_throwables()
         consumables = player.get_inventory().get_consumables()
         choices = []
@@ -151,8 +159,8 @@ def playerAction(player, enemy):
             choices.append(item.upper())
         for item in consumables:
             choices.append(item.upper())
-        print(choices)
-        chosen_item_str = playerInput(choices)
+        textbox.append_html_text("%s<br>" % choices)
+        chosen_item_str = playerInput(choices, ui_manager, screen, textbox, text_entry)
         # checks from which inventory the chosen item is from
         if inv.get_item_object(throwables, chosen_item_str):
             chosen_item = inv.get_item_object(throwables, chosen_item_str)
@@ -163,38 +171,42 @@ def playerAction(player, enemy):
         if isinstance(chosen_item, i.Throwable):
             damage = damageChecker(chosen_item.get_damage(), chosen_item.get_damage_type(), enemy)
             enemy.take_damage(damage)
-            print("%s throws their %s, dealing %i damage to %s" % (player, chosen_item.get_name(), damage, enemy))
+            textbox.append_html_text(
+                "%s throws their %s, dealing %i damage to %s<br>" % (player, chosen_item.get_name(), damage, enemy))
 
         if isinstance(chosen_item, i.HealthGiver):
             chosen_item.consume(player)
-            print("%s drinks their %s, healing %i HP" % (player, chosen_item.get_name(), chosen_item.get_points()))
+            textbox.append_html_text(
+                "%s drinks their %s, healing %i HP<br>" % (player, chosen_item.get_name(), chosen_item.get_points()))
 
         if isinstance(chosen_item, i.ResistanceGiver):
             item_turns = chosen_item.consume(player)
             player_buffs[chosen_item] = item_turns
-            print("%s drinks their %s, gaining %s resistance for %i turns" % (player,
-                                                                              chosen_item.get_name(),
-                                                                              chosen_item.get_resistance(),
-                                                                              chosen_item.get_turns()))
+            textbox.append_html_text("%s drinks their %s, gaining %s "
+                                     "resistance for %i turns<br>" % (player,
+                                                                      chosen_item.get_name(),
+                                                                      chosen_item.get_resistance(),
+                                                                      chosen_item.get_turns()))
         if isinstance(chosen_item, i.StrengthGiver):
             item_turns = chosen_item.consume(player)
             player_buffs[chosen_item] = item_turns
-            print("%s drinks their %s, gaining %i strength for %i turns" % (player,
-                                                                            chosen_item.get_name(),
-                                                                            chosen_item.get_points(),
-                                                                            chosen_item.get_turns()))
+            textbox.append_html_text("%s drinks their %s, gaining %i "
+                                     "strength for %i turns<br>" % (player,
+                                                                    chosen_item.get_name(),
+                                                                    chosen_item.get_points(),
+                                                                    chosen_item.get_turns()))
         player.get_inventory().remove(chosen_item)
 
     else:
-        print("You attempt to flee...")
+        textbox.append_html_text("You attempt to flee...<br>")
         return True
 
 
-def enemyAction(player, enemy):
+def enemyAction(player, enemy, textbox):
     # 50/50 chance to attack or use a spell
     choice = random.randint(0, 1)
     if choice == 0:
-        attack(enemy, player)
+        attack(enemy, player, textbox)
     else:
         # equal chance for each spell
         spell_list = enemy.get_spell_list()
@@ -204,26 +216,33 @@ def enemyAction(player, enemy):
         if isinstance(chosen_spell, a.Attacks):
             damage = damageChecker(chosen_spell.get_damage(), chosen_spell.get_damage_type(), player)
             player.take_damage(damage)
-            print("%s %s, dealing %i damage to %s" % (enemy, chosen_spell.get_flavour_text(), damage, player))
+            textbox.append_html_text(
+                "%s %s, dealing %i damage to %s<br>" % (enemy, chosen_spell.get_flavour_text(), damage, player))
         elif isinstance(chosen_spell, s.StrengthDeBuff):
             # only casts if not already buffed or debuffed, as otherwise
             # it would cause strength to not be put back to normal
             if chosen_spell not in player_buffs:
                 chosen_spell.cast(player)
             player_buffs[chosen_spell] = chosen_spell.get_turns()
-            print("%s %s" % (enemy, chosen_spell.get_flavour_text()))
+            textbox.append_html_text("%s %s<br>" % (enemy, chosen_spell.get_flavour_text()))
         elif isinstance(chosen_spell, s.TimedSpell):
             if chosen_spell not in enemy_buffs:
                 chosen_spell.cast(enemy)
             enemy_buffs[chosen_spell] = chosen_spell.get_turns()
-            print("%s %s" % (enemy, chosen_spell.get_flavour_text()))
+            textbox.append_html_text("%s %s<br>" % (enemy, chosen_spell.get_flavour_text()))
         else:
             chosen_spell.cast(enemy)
-            print("%s %s" % (enemy, chosen_spell.get_flavour_text()))
+            textbox.append_html_text("%s %s<br>" % (enemy, chosen_spell.get_flavour_text()))
 
 
 # overall combat function. makes use of lots of above functions
-def combat(player, enemy):
+def combat(player, enemy, ui_manager, screen):
+    # creates now ui elements only for combat use
+    textbox = pygame_gui.elements.UITextBox("An enemy approaches! <br>", pygame.Rect((10, 10), (620, 400)),
+                                            ui_manager)
+    text_entry = pygame_gui.elements.UITextEntryLine(pygame.Rect((10, 420), (620, 40)), ui_manager)
+    ui_manager.set_focus_set(text_entry)
+
     turn_count = 0
     # checks if player wants to flee
     fleeCheck = False
@@ -233,15 +252,19 @@ def combat(player, enemy):
         # both alive
         if player.get_current_health() > 0 and enemy.get_current_health() > 0:
             turn_count += 1
-            print(player_buffs)
-            # info, will probably be changed for pygame version rather than just printing
-            print("%s HP: %i / %i" % (player, player.get_current_health(), player.get_total_health()))
-            print("%s Mana: %i / %i" % (player, player.get_current_mana(), player.get_total_mana()))
-            print("%s HP: %i / %i" % (enemy, enemy.get_current_health(), enemy.get_total_health()))
-            print("Player turn...")
-            fleeCheck = playerAction(player, enemy)
+            # info about players stats
+            textbox.append_html_text(
+                "%s HP: %i / %i" % (player, player.get_current_health(), player.get_total_health()))
+            textbox.append_html_text(", Mana: %i / %i<br>" % (player.get_current_mana(), player.get_total_mana()))
+            textbox.append_html_text(
+                "%s HP: %i / %i<br>" % (enemy, enemy.get_current_health(), enemy.get_total_health()))
+            textbox.append_html_text("Player turn...<br><br>")
+            ui_manager.update(time_delta)
+            ui_manager.draw_ui(screen)
+            pygame.display.flip()
+            fleeCheck = playerAction(player, enemy, ui_manager, screen, textbox, text_entry)
             if enemy.get_current_health() > 0:
-                enemyAction(player, enemy)
+                enemyAction(player, enemy, textbox)
                 # buffs are checked to see if theyre still active
                 buffChecker(player, player_buffs)
                 buffChecker(enemy, enemy_buffs)
@@ -252,35 +275,28 @@ def combat(player, enemy):
         else:
             continue_combat = False
 
+    if fleeCheck:
+        clearBuffs(player, enemy)
+        textbox.append_html_text("Player flees...<br>")
+        outcome = "FLEE"
+
     # battle over and player alive = win
-    if player.get_current_health() > 0:
+    elif player.get_current_health() > 0:
         clearBuffs(player, enemy)
-        print("Player wins!")
+        textbox.append_html_text("Player wins!<br>")
         # win/lose/flee for use outside of combat to determine outcome
-        return "WIN"
-    elif fleeCheck:
-        clearBuffs(player, enemy)
-        print("Player flees...")
-        return "FLEE"
+        outcome = "WIN"
+
     # battle over and player not alive = lose
     else:
         clearBuffs(player, enemy)
-        print("Enemy wins, Game Over!")
-        return "LOSE"
+        textbox.append_html_text("Enemy wins, Game Over!<br>")
+        outcome = "LOSE"
+    ui_manager.update(time_delta)
+    ui_manager.draw_ui(screen)
+    pygame.display.flip()
 
-
-"""
-bite = a.Melee("Bite", "bites", 5)
-minorheal = s.Heal("Minor Healing", 10, 5)
-fireball = a.Fire("Fireball", "casts a fireball", 10, 5)
-fireres = s.ResistanceBuff("Flame Body", None, 5, 3, "Fire")
-strup = s.StrengthBuff("Bulk", 3, 5, 3)
-strdown = s.StrengthDeBuff("Weaken", 3, 5, 3)
-mimic = Mimic(1, 20, [bite, strup])
-knight1.add_spell(minorheal)
-knight1.add_spell(fireball)
-knight1.add_spell(fireres)
-knight1.add_spell(strup)
-knight1.add_spell(strdown)
-combat(knight1, mimic)
-"""
+    pygame.time.wait(2000)
+    textbox.kill()
+    text_entry.kill()
+    return outcome
