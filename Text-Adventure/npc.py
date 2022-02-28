@@ -7,14 +7,20 @@ class NPC(Character):
     def __init__(self, name, level, health):
         super().__init__(name, level, health)
         self._description = ""
-        self._speech = []
+        self._speech = ""
         self._commands = []
 
     def get_description(self):
         return self._description
 
+    def set_description(self, description):
+        self._description = description
+
     def get_speech(self):
         return self._speech
+
+    def set_speech(self, speech):
+        self._speech = speech
 
     def get_commands(self):
         return self._commands
@@ -100,3 +106,7 @@ class Merchant(NPC):
 merchant = Merchant("Bob")
 merchant.get_inventory().add(ci.heal_potion)
 merchant.get_inventory().add(ci.longsword)
+
+man = NPC("John", 1, 1)
+man.set_description("A strange looking man.<br>")
+man.set_speech("The man says that you should <u>search</u> the area.<br>")

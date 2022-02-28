@@ -103,6 +103,9 @@ def process_input(input_text):
                 output_text += str(other[0]) + ". Amount: " + str(other[1]) + "<br>"
 
     if command in trading:
+        if "merchant" not in current_scene.get_npcs().keys():
+            output_text = "There is nobody around to trade with. <br>"
+            return
         trader = current_scene.get_npcs()["merchant"]
         if command == "browse":
             output_text += trader.merchant_browse()
@@ -164,6 +167,7 @@ def process_input(input_text):
 
 
 def main():
+    global current_scene
     global output_text
     started = True
     running = True

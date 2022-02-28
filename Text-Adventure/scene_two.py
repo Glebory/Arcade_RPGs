@@ -1,5 +1,6 @@
 import scene
 import created_items
+import npc
 
 class SceneTwo(scene.Scene):
     def __init__(self):
@@ -10,7 +11,7 @@ class SceneTwo(scene.Scene):
         self._exits["north"] = "scene1"
         self._objects = [created_items.stick]
         self._locations = {}
-        self._npcs = {"man": "You talk to the man, he tells you to <u>search</u> the area.<br>"}
+        self._npcs = {"man": npc.man}
 
     def get_name(self):
         return super().get_name()
