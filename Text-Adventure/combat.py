@@ -237,10 +237,13 @@ def enemyAction(player, enemy, textbox):
 
 # overall combat function. makes use of lots of above functions
 def combat(player, enemy, ui_manager, screen):
-    # creates now ui elements only for combat use
-    textbox = pygame_gui.elements.UITextBox("An enemy approaches! <br>", pygame.Rect((10, 10), (620, 400)),
+    # creates new ui elements only for combat use
+    textbox = pygame_gui.elements.UITextBox("A %s approaches! <br>" % enemy, pygame.Rect((10, 10), (620, 400)),
                                             ui_manager)
     text_entry = pygame_gui.elements.UITextEntryLine(pygame.Rect((10, 420), (620, 40)), ui_manager)
+    image = pygame.image.load(enemy.get_image())
+    imagebox = pygame_gui.elements.UIImage(pygame.Rect((492, 10), (128, 128)), image, ui_manager)
+    # (556, 336), (620, 400)
     ui_manager.set_focus_set(text_entry)
 
     turn_count = 0
@@ -299,4 +302,5 @@ def combat(player, enemy, ui_manager, screen):
     pygame.time.wait(2000)
     textbox.kill()
     text_entry.kill()
+    imagebox.kill()
     return outcome
