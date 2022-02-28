@@ -82,8 +82,8 @@ def process_input(input_text):
                     current_scene.remove_object(item)
                 else:
                     output_text = "That item isn't here! <br>"
-            else:
-                output_text = command + " what? <br>"
+            #else:
+            #    output_text = command + " what? <br>"
 
         if command == "items" or command == "inventory":
             output_text = "You are wearing: <br>"
@@ -152,6 +152,8 @@ def process_input(input_text):
                                     output_text = "Game Over<br>"
                                     # game over stuff (client closes?)
                                 else:
+                                    output_text = ("You defeated the %s!<br>" % current_scene.get_enemy()) \
+                                                  + output_text
                                     current_scene.remove_enemy()
             elif direction in locations:
                 output_text = locations[direction]
@@ -179,6 +181,7 @@ def main():
                     playername = event.text
                     started = False
                     textbox.append_html_text("Welcome, " + playername + "<br>")
+                    player.set_name(playername)
                     textbox.append_html_text(current_scene.get_description())
                     continue
 
