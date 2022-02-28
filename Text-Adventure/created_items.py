@@ -3,6 +3,7 @@ from item import *
 coin = Item("Coin", "A round coin made from some metal", 1)
 
 stick = Item("Stick", "A stick from a tree branch", 1)
+d_key = Item("Dungeon Key", "A rusty key that was found in the dungeon", 1)
 
 longsword = Weapon("Longsword", "A sharp sword made from steel", 5, "Melee", 3)
 flame_sword = Weapon("Flame Sword", "Fiery blade that catches fire when wielded", 50, "Fire", 7)
