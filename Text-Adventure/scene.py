@@ -1,3 +1,16 @@
+import random
+
+
+# takes a list of objects (items/enemies) and list of numbers (equal lengths between lists)
+# each object corresponds to a number
+# e.g. in [a, b, c] [1, 2, 3], a -> 1, b -> 2, c -> 3
+# the list of numbers are the chances for each choice when put over the total
+# e.g. [1,2,3] total = 6, chance for a = 1/6, chance for b = 2/6, chance for c = 3/6
+def generate(object_list, chance_list):
+    chosen_object = random.choices(object_list, weights=chance_list)
+    return chosen_object[0]  # returns a list... need to get [0] index for object
+
+
 class Scene:
     def __init__(self):
         self._name = ""
