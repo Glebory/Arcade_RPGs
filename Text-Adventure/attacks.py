@@ -51,8 +51,11 @@ class Ranged(Attacks):
 
 
 #examples
-bite = Melee("Bite", "bites", 5)
-fireball = Fire("Fireball", "casts a fireball", 10, 5)
-shard = Water("Shards of Ice", "shoots shards of ice", 8, 5)
-rock_throw = Earth("Rock Throw", "throws chunks of rock", 10, 5)
+bite = Melee("Bite", "bites", 3)
+stab = Melee("Stab", "stabs with their sword", 4)
+slam = Melee("Slam", "slams their hammer", 6)
+fireball = Fire("Fireball", "casts a fireball", 6, 5)
+shard = Water("Shards of Ice", "shoots shards of ice", 5, 5)
+rock_throw = Earth("Rock Throw", "throws chunks of rock", 5, 5)
 spit = Ranged("Spit", "spits green goo", 3)
+shoot = Ranged("Shoot", "shoots an arrow", 4)
