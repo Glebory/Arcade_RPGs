@@ -1,7 +1,8 @@
 import inventory as inv
 import created_items as ci
 import item
-import spells
+import attacks as a
+import spells as s
 
 
 class Character:
@@ -25,6 +26,9 @@ class Character:
 
     def __str__(self):
         return self._name
+
+    def set_name(self, name):
+        self._name = name
 
     # keeps current health within bounds of total health
     def health_check(self):
@@ -147,7 +151,6 @@ class Player_swordsman(Character):
             self._spells.append(spell)
 
 
-
 knight1 = Player_swordsman("Bertrand", 1, 10, ci.longsword, ci.cloth_armour)
 knight1.add_item(ci.stick)
 knight1.add_item(ci.heal_potion)
@@ -164,5 +167,7 @@ knight1.add_item(ci.coin)
 knight1.add_item(ci.coin)
 knight1.add_item(ci.coin)
 
-
-
+knight1.add_spell(a.shard)
+knight1.add_spell(a.rock_throw)
+knight1.add_spell(a.shard)
+knight1.add_spell(s.Heal("Minor Heal", 10, 5))
