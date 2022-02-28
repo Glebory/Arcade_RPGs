@@ -187,11 +187,33 @@ def main():
                     textbox.append_html_text("Welcome, " + playername + "<br>")
                     player.set_name(playername)
                     textbox.append_html_text(current_scene.get_description())
+                    textbox.rebuild()
                     continue
 
                 process_input(event.text.lower())
                 textbox.append_html_text(output_text)
                 output_text = ""
+
+            if textbox.process_event(event):
+                pass
+            if event.type == pygame_gui.UI_TEXT_BOX_LINK_CLICKED:
+                textbox.append_html_text("> " + event.link_target + "<br>")
+                if event.link_target in ("north", "south", "east", "west"):
+                    exits = current_scene.get_exits()
+                    exitName = exits.get(event.link_target)
+                    if exitName is not None:
+                        for scene in scenes:
+                            if exitName == scene.get_name():
+                                current_scene = scene
+                                output_text = current_scene.get_description()
+
+                if event.link_target in current_scene.get_npcs().keys():
+                    output_text = current_scene.get_npcs().get(event.link_target).get_speech()
+
+                textbox.append_html_text(output_text)
+                output_text = ""
+                textbox.rebuild()
+
 
         ui_manager.update(time_delta)
         ui_manager.draw_ui(screen)

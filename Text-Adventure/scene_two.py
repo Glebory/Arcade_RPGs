@@ -6,8 +6,8 @@ class SceneTwo(scene.Scene):
     def __init__(self):
         super().__init__()
         self._name = "scene2"
-        self._description = "You enter the next area, the door you passed through is to your <u>North</u> now." \
-                            "There is a <u>man</u> sitting under a tree. <br>"
+        self._description = "You enter the next area, the door you passed through is to your <a href='north'>North</a> now." \
+                            "There is a <a href='man'>man</a> sitting under a tree. <br>"
         self._exits["north"] = "scene1"
         self._objects = [created_items.stick]
         self._locations = {}
