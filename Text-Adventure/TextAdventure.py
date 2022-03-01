@@ -1,7 +1,7 @@
 import pygame
 import pygame_gui
 from character import *
-import inventory
+from inventory import *
 import npc
 import combat as c
 import enemies as e
@@ -26,7 +26,7 @@ clock = pygame.time.Clock()
 # keywords for moving between scenes
 movement = ("go", "move", "exit", "leave", "travel", "walk")
 # keywords for interacting with scene objects
-action = ("talk", "fight", "search", "take", "inventory", "items")
+action = ("talk", "fight", "search", "take", "inventory", "items", "equip")
 trading = ("buy", "sell", "browse")
 
 scenes = [s1.SceneOne(), s2.SceneTwo(), fs.SceneForestOne(), ds.SceneDungeonOne(),
@@ -49,7 +49,8 @@ def process_input(input_text):
                       "talk (character)- to characters<br>" \
                       "search - the surroundings<br>" \
                       "take (item name)- an item<br>" \
-                      "inventory/items - items you have<br>" \
+                      "inventory/items - items you have<br>"\
+                      "equip (item name) - equip an item to yourself<br>"\
                       "browse - trader's items<br>" \
                       "buy/sell (item name) - trade with a trader<br>"
     # action within a scene
@@ -111,6 +112,39 @@ def process_input(input_text):
             for other in inv.get_other().values():
                 output_text += str(other[0]) + ". Amount: " + str(other[1]) + "<br>"
 
+        if command == "equip":
+            item = ""
+            if len(input_words) == 1:
+                output_text = "Equip what item?<br>"
+                return
+            if len(input_words) == 2:
+                item = input_words[1]
+            if len(input_words) > 2:
+                for word in input_words:
+                    if word == input_words[0]:
+                        continue
+                    item += word + " "
+                item = item.rstrip()
+            player_inv = player.get_inventory()
+            if get_item_object(player_inv.get_weapons(), item.upper()):
+                weapon = get_item_object(player_inv.get_weapons(), item.upper())
+                old_weapon = player.get_weapon()
+                player.set_weapon(weapon)
+                player.add_item(old_weapon)
+                player.remove_item(weapon)
+                output_text = "You have equipped " + weapon.get_name() + ".<br>" + old_weapon.get_name() + " has been" \
+                              " moved to your inventory.<br>"
+            if get_item_object(player_inv.get_armour(), item.upper()):
+                armour = get_item_object(player_inv.get_armour(), item.upper())
+                old_armour = player.get_armour()
+                player.set_armour(armour)
+                player.add_item(old_armour)
+                player.remove_item(armour)
+                output_text = "You have equipped " + armour.get_name() + ".<br>" + old_armour.get_name() + " has been" \
+                              " moved to your inventory.<br>"
+            else:
+                output_text = "You cannot equip that!<br>"
+
     if command in trading:
         if "merchant" not in current_scene.get_npcs().keys():
             output_text = "There is nobody around to trade with. <br>"
@@ -120,6 +154,9 @@ def process_input(input_text):
             output_text += trader.merchant_browse()
         if command == "buy":
             item = ""
+            if len(input_words) == 1:
+                output_text = "Buy what item?<br>"
+                return
             if len(input_words) == 2:
                 item = input_words[1]
             if len(input_words) > 2:
@@ -131,6 +168,9 @@ def process_input(input_text):
             output_text = trader.buy_from_merchant(item, player)
         if command == "sell":
             item = ""
+            if len(input_words) == 1:
+                output_text = "Sell what item?<br>"
+                return
             if len(input_words) == 2:
                 item = input_words[1]
             if len(input_words) > 2:

@@ -37,21 +37,19 @@ class Merchant(NPC):
         return self._inv
 
     def buy_from_merchant(self, item_str, player):
+        item = None
         if get_item_object(self._inv.get_weapons(), item_str.upper()):
             item = get_item_object(self._inv.get_weapons(), item_str.upper())
-            inv_section = self._inv.get_weapons()
         if get_item_object(self._inv.get_armour(), item_str.upper()):
             item = get_item_object(self._inv.get_armour(), item_str.upper())
-            inv_section = self._inv.get_armour()
         if get_item_object(self._inv.get_throwables(), item_str.upper()):
             item = get_item_object(self._inv.get_throwables(), item_str.upper())
-            inv_section = self._inv.get_throwables()
         if get_item_object(self._inv.get_consumables(), item_str.upper()):
             item = get_item_object(self._inv.get_consumables(), item_str.upper())
-            inv_section = self._inv.get_consumables()
         if get_item_object(self._inv.get_other(), item_str.upper()):
             item = get_item_object(self._inv.get_other(), item_str.upper())
-            inv_section = self._inv.get_other()
+        if not item:
+            return "The merchant does not have " + item_str + ".<br>"
         item_cost = item.get_value()
         player_coins = get_item_quantity(player.get_inventory().get_other(), ci.coin)
         if player_coins >= item_cost:
@@ -64,22 +62,20 @@ class Merchant(NPC):
             return "Not enough coin!<br>"
 
     def sell_to_merchant(self, item_str, player):
+        item = None
         player_inv = player.get_inventory()
         if get_item_object(player_inv.get_weapons(), item_str.upper()):
             item = get_item_object(player_inv.get_weapons(), item_str.upper())
-            inv_section = player_inv.get_weapons()
         if get_item_object(player_inv.get_armour(), item_str.upper()):
             item = get_item_object(player_inv.get_armour(), item_str.upper())
-            inv_section = player_inv.get_armour()
         if get_item_object(player_inv.get_throwables(), item_str.upper()):
             item = get_item_object(player_inv.get_throwables(), item_str.upper())
-            inv_section = player_inv.get_throwables()
         if get_item_object(player_inv.get_consumables(), item_str.upper()):
             item = get_item_object(player_inv.get_consumables(), item_str.upper())
-            inv_section = player_inv.get_consumables()
         if get_item_object(player_inv.get_other(), item_str.upper()):
             item = get_item_object(player_inv.get_other(), item_str.upper())
-            inv_section = player_inv.get_other()
+        if not item:
+            return "You do not have " + item_str + ".<br>"
         item_cost = item.get_value()
         player.remove_item(item)
         self._inv.add(item)
