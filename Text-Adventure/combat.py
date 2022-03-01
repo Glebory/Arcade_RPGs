@@ -114,7 +114,7 @@ def playerAction(player, enemy, ui_manager, screen, textbox, text_entry):
             name = spell.get_name().upper()
             choices.append(name)
             spell_reference.append([name, spell])
-        textbox.append_html_text("%s<br>" % choices)
+        textbox.append_html_text("%s<br><br>" % choices)
         chosen_spell_str = playerInput(choices, ui_manager, screen, textbox, text_entry)
         chosen_spell = ""
 
@@ -159,7 +159,7 @@ def playerAction(player, enemy, ui_manager, screen, textbox, text_entry):
             choices.append(item.upper())
         for item in consumables:
             choices.append(item.upper())
-        textbox.append_html_text("%s<br>" % choices)
+        textbox.append_html_text("%s<br><br>" % choices)
         chosen_item_str = playerInput(choices, ui_manager, screen, textbox, text_entry)
         # checks from which inventory the chosen item is from
         if inv.get_item_object(throwables, chosen_item_str):
@@ -261,7 +261,7 @@ def combat(player, enemy, ui_manager, screen):
             textbox.append_html_text(", Mana: %i / %i<br>" % (player.get_current_mana(), player.get_total_mana()))
             textbox.append_html_text(
                 "%s HP: %i / %i<br>" % (enemy, enemy.get_current_health(), enemy.get_total_health()))
-            textbox.append_html_text("Player turn...<br><br>")
+            textbox.append_html_text("Player turn... Attack, Spell, Item or Flee?<br><br>")
             ui_manager.update(time_delta)
             ui_manager.draw_ui(screen)
             pygame.display.flip()
