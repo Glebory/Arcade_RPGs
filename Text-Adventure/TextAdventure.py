@@ -186,6 +186,19 @@ def process_clicks(target):
                 if exitName == scene.get_name():
                     current_scene = scene
                     output_text = current_scene.get_description()
+                    if current_scene.get_enemy():
+                        outcome = c.combat(player, current_scene.get_enemy(), ui_manager, screen)
+                        ui_manager.set_focus_set(text_entry)
+                        if outcome == "FLEE":
+                            current_scene = s1.SceneOne()
+                            output_text = "You escape the area...<br>"
+                        elif outcome == "LOSE":
+                            output_text = "Game Over<br>"
+                            # game over stuff (client closes?)
+                        else:
+                            output_text = ("You defeated the %s!<br>" % current_scene.get_enemy()) \
+                                          + output_text
+                            current_scene.remove_enemy()
     if target in current_scene.get_locations().keys():
         output_text = current_scene.get_locations().get(target)
 
