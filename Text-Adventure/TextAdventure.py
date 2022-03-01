@@ -29,7 +29,7 @@ movement = ("go", "move", "exit", "leave", "travel", "walk")
 action = ("talk", "fight", "search", "take", "inventory", "items", "equip")
 trading = ("buy", "sell", "browse")
 
-scenes = [s1.SceneOne(), s2.SceneTwo(), fs.SceneForestOne(), ds.SceneDungeonOne(),
+scenes = [s1.SceneOne(), s2.SceneTwo(), s2.SceneTwoPartTwo(), fs.SceneForestOne(), ds.SceneDungeonOne(),
           ds.SceneDungeonTwo(), ds.SceneDungeonThree(), ds.SceneDungeonFour(),
           ds.SceneDungeonFive(), ds.SceneDungeonSix(), ds.SceneDungeonSeven()]
 current_scene = s1.SceneOne()
