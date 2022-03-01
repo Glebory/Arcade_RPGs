@@ -43,6 +43,15 @@ def process_input(input_text):
     if not input_words:
         return
     command = input_words[0]
+    if command == "help":
+        output_text = "Available commands:<br>" \
+                      "go/move/exit/leave/travel/walk (direction)- movement<br>" \
+                      "talk (character)- to characters<br>" \
+                      "search - the surroundings<br>" \
+                      "take (item name)- an item<br>" \
+                      "inventory/items - items you have<br>" \
+                      "browse - trader's items<br>" \
+                      "buy/sell (item name) - trade with a trader<br>"
     # action within a scene
     if command in action:
         if command == "search":
@@ -165,6 +174,30 @@ def process_input(input_text):
         else:
             output_text = command + " where? <br>"
 
+def process_clicks(target):
+    global current_scene
+    global output_text
+
+    if target in ("north", "south", "east", "west"):
+        exits = current_scene.get_exits()
+        exitName = exits.get(target)
+        if exitName is not None:
+            for scene in scenes:
+                if exitName == scene.get_name():
+                    current_scene = scene
+                    output_text = current_scene.get_description()
+    if target in current_scene.get_locations().keys():
+        output_text = current_scene.get_locations().get(target)
+
+    if target in current_scene.get_npcs().keys():
+        output_text = current_scene.get_npcs().get(target).get_speech()
+    if target in trading:
+        if target == "browse":
+            trader = current_scene.get_npcs()["merchant"]
+            output_text = trader.merchant_browse()
+        if target == "buy" or target == "sell":
+            output_text = "use: '" + str(target) + " item name'<br>"
+
 
 def main():
     global current_scene
@@ -198,17 +231,7 @@ def main():
                 pass
             if event.type == pygame_gui.UI_TEXT_BOX_LINK_CLICKED:
                 textbox.append_html_text("> " + event.link_target + "<br>")
-                if event.link_target in ("north", "south", "east", "west"):
-                    exits = current_scene.get_exits()
-                    exitName = exits.get(event.link_target)
-                    if exitName is not None:
-                        for scene in scenes:
-                            if exitName == scene.get_name():
-                                current_scene = scene
-                                output_text = current_scene.get_description()
-
-                if event.link_target in current_scene.get_npcs().keys():
-                    output_text = current_scene.get_npcs().get(event.link_target).get_speech()
+                process_clicks(event.link_target)
 
                 textbox.append_html_text(output_text)
                 output_text = ""

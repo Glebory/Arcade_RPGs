@@ -29,8 +29,8 @@ class Merchant(NPC):
     def __init__(self, name):
         super().__init__(name, 1, 1)
         self._description = "A person who trades various goods. <br>"
-        self._speech = "Good day, would you like to <u>Buy</u>, <u>Sell</u> or just <u>Browse</u>?<br>"
-        self._commands = ["buy", "sell", "browse"]
+        self._speech = "Good day, would you like to <a href='buy'>Buy</a>, <a href='sell'>Sell</a> or just " \
+                       "<a href='browse'>Browse</a>?<br>"
         self._inv = Inventory()
 
     def get_inventory(self):
