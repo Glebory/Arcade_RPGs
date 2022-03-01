@@ -105,4 +105,6 @@ merchant.get_inventory().add(ci.longsword)
 
 man = NPC("John", 1, 1)
 man.set_description("A strange looking man.<br>")
-man.set_speech("The man says that you should <u>search</u> the area.<br>")
+man.set_speech("The man warns you about a creature on the other side of the door."
+               " Remember to use attack/spell/item/flee during combat. Use 'help' for commands."
+               "<br>")
