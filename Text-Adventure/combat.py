@@ -81,6 +81,9 @@ def playerInput(command_list, ui_manager, screen, textbox, text_entry):
         ui_manager.update(time_delta)
         ui_manager.draw_ui(screen)
         pygame.display.flip()
+        if text_entry not in ui_manager.get_focus_set():
+            text_entry.set_text("")
+            ui_manager.set_focus_set(text_entry)
 
 
 # calculates overall damage when a character attacks its enemy
