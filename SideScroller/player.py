@@ -5,12 +5,11 @@ from gameobjects import GameObjects
 from character import Character
 import health
 
-
 class Player(Character):
     def __init__(self, position, health):
         super().__init__(position, health)
-        self.image = pygame.image.load("images/player11.png")
-        self.image = pygame.transform.scale(self.image, (self.image.get_width() * 0.3, self.image.get_height() * 0.3))
+        self.image = pygame.image.load("images/player.png")
+        self.image = pygame.transform.scale(self.image, (self.image.get_width() * 0.1, self.image.get_height() * 0.1))
         self.rect = self.image.get_rect()
         self.rect.center = (self.position[0], self.position[1])
         self._left = False
@@ -25,6 +24,7 @@ class Player(Character):
         self._shot_direction = ""
         self._counter = 0
         self._max_health = 4
+        self._items = []
 
     def __str__(self):
         return "%s" % self._position
@@ -45,17 +45,13 @@ class Player(Character):
             origin += 60
             self._remaining_health.add(heart_collection)
 
-
     def add_health(self):
         pass
 
     def del_health(self):
-        #if self._max_health > 2:
         self._remaining_health.empty()
         self._max_health -= 1
-        print(self._max_health)
         self.update_health(self._max_health)
-
 
     def move(self):
         self._xSpeed = 0
@@ -69,7 +65,6 @@ class Player(Character):
         self.rect.y += self._ySpeed
 
     def jump(self):
-        # 32
         force = (1 / 2) * self._mass * (self._velocity ** 2)
         if self._jump:
             self.rect.y -= force
@@ -82,3 +77,7 @@ class Player(Character):
                 self._velocity = 8
                 self._mass = 1
         pygame.time.delay(20)
+
+    def add_inventory(self, item):
+        if item not in self._inventory:
+            self._inventory.append(item)
