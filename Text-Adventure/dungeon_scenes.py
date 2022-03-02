@@ -17,6 +17,7 @@ class SceneDungeonOne(scene.Scene):
         self._locations = {}
         self._npcs = {}
         self._enemy = None
+        self._loot = {}
 
 
 class SceneDungeonTwo(scene.Scene):
@@ -34,6 +35,7 @@ class SceneDungeonTwo(scene.Scene):
         self._locations = {"door": "The giant stone door is locked shut. Only a key could open it.<br>"}
         self._npcs = {}
         self._enemy = e.goblin
+        self._loot = {}
 
 
 class SceneDungeonThree(scene.Scene):
@@ -48,6 +50,7 @@ class SceneDungeonThree(scene.Scene):
         self._locations = {}
         self._npcs = {}  # enemy here?
         self._enemy = scene.generate([e.zombie, e.slime], [1, 1])
+        self._loot = {}
 
 
 class SceneDungeonFour(scene.Scene):
@@ -62,6 +65,7 @@ class SceneDungeonFour(scene.Scene):
         self._locations = {}
         self._npcs = {}
         self._enemy = scene.generate([e.zombie, e.slime], [1, 1])
+        self._loot = {}
 
 
 class SceneDungeonFive(scene.Scene):
@@ -74,9 +78,11 @@ class SceneDungeonFive(scene.Scene):
         self._exits["south"] = "dungeon3"
         self._objects = [ci.iron_armour]
         self._locations = {"right": "This chest has seen some wear and tear. There is an odd smell coming from it.",
-                           "left": "This chest is rather dusty. It hasn't been touched in a while."}
+                           "left": "This chest is rather dusty. It hasn't been touched in a while.",
+                           "chest": "Search Left or Search Right?"}
         self._npcs = {}
-        self._enemy = e.mimic
+        self._enemy = None
+        self._loot = {"right": e.mimic, "left": ci.iron_armour}
 
 
 class SceneDungeonSix(scene.Scene):
@@ -87,12 +93,12 @@ class SceneDungeonSix(scene.Scene):
                             " office, as there is a large table in the middle and some barrels" \
                             " against the wall. The exit is towards your <a href='south'>South</a>.<br>"
         self._exits["south"] = "dungeon4"
-        self._objects = [scene.generate([ci.heal_potion, ci.str_tonic], [1, 1]), ci.coin, ci.d_key]
-        self._locations = {"table": "The table is covered in dust, dirt and rotted papers. Among the mess you"
-                                    " see a rusty key.",
+        self._objects = [ci.coin]
+        self._locations = {"table": "The table is covered in dust, dirt and rotted papers.",
                            "barrels": "Wooden storage barrels, built to last."}
         self._npcs = {}
         self._enemy = None
+        self._loot = {"barrels": scene.generate([ci.heal_potion, ci.str_tonic], [1, 1]), "table": ci.d_key }
 
 
 class SceneDungeonSeven(scene.Scene):
@@ -102,7 +108,8 @@ class SceneDungeonSeven(scene.Scene):
         self._description = "You enter a room. At the back of the room is a single chest. " \
                             "The exit is towards your <a href='south'>South</a>.<br>"
         self._exits["south"] = "dungeon2"
-        self._objects = [ci.flame_sword, ci.coin]
+        self._objects = [ci.coin]
         self._locations = {"chest": "A fine looking chest with hints of gold in its design."}
         self._npcs = {}
         self._enemy = e.goblin_brute
+        self._loot = {"chest": ci.flame_sword}
