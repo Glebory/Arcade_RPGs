@@ -28,8 +28,10 @@ movement = ("go", "move", "exit", "leave", "travel", "walk")
 # keywords for interacting with scene objects
 action = ("talk", "fight", "search", "take", "inventory", "items", "equip")
 trading = ("buy", "sell", "browse")
+inventory_keywords = ("equipped", "weapons", "armour", "throwables", "consumables", "misc")
 
-scenes = [s1.SceneOne(), s2.SceneTwo(), s2.SceneTwoPartTwo(), fs.SceneForestOne(), ds.SceneDungeonOne(),
+
+scenes = [s1.SceneOne(), s2.SceneTwo(), s2.SceneTwoPartTwo(), fs.SceneForestOne(), fs.SceneForestTwo(), ds.SceneDungeonOne(),
           ds.SceneDungeonTwo(), ds.SceneDungeonThree(), ds.SceneDungeonFour(),
           ds.SceneDungeonFive(), ds.SceneDungeonSix(), ds.SceneDungeonSeven()]
 current_scene = s1.SceneOne()
@@ -97,18 +99,30 @@ def process_input(input_text):
 
         if command == "items" or command == "inventory":
             output_text = "You are wearing: <br>"
+            output_text = "What would you like to see? <br> -Equipped<br> -Weapons<br>"\
+                            " -Armour<br> -Throwables<br> -Consumables<br> -Misc<br> ------------ <br>"
+            inv = player.get_inventory()
+
+    
+    if command in inventory_keywords:
+        inv = player.get_inventory()
+        output_text = ""
+        if command == "equipped":
             output_text += str(player.get_weapon()) + "<br>"
             output_text += str(player.get_armour()) + "<br>"
-            inv = player.get_inventory()
-            output_text += "You have: <br>"
+        if command == "weapons":
             for weapon in inv.get_weapons().values():
                 output_text += str(weapon[0]) + ". Amount: " + str(weapon[1]) + "<br>"
+        if command == "armour":
             for armour in inv.get_armour().values():
                 output_text += str(armour[0]) + ". Amount: " + str(armour[1]) + "<br>"
+        if command == "throwables":
             for throwable in inv.get_throwables().values():
                 output_text += str(throwable[0]) + ". Amount: " + str(throwable[1]) + "<br>"
+        if command == "consumables":
             for consumable in inv.get_consumables().values():
                 output_text += str(consumable[0]) + ". Amount: " + str(consumable[1]) + "<br>"
+        if command == "misc":
             for other in inv.get_other().values():
                 output_text += str(other[0]) + ". Amount: " + str(other[1]) + "<br>"
 
