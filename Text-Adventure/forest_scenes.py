@@ -74,7 +74,6 @@ class SceneForestFour(scene.Scene):
 
 
 class SceneForestFive(scene.Scene):
-    
     def __init__(self):
         super().__init__()
         self._name = "forest4"
@@ -96,9 +95,7 @@ class SceneForestSix(scene.Scene):
         super().__init__()
         self._name = "forest4"# edit after advanced search
         self._description = "You follow the path that split east.<br>"\
-                            "on the side of the road you spot a small rucksack" \
-                            " a river.<br> The river runs <a href='north'>Northerly</a>. The river is too deep and "\
-                            "fast here to cross. You can also return<a href='west'>West</a> to the main path"
+                            "On the side of the road you spot a small rucksack" 
         self._exits["north"] = "forest7"
         self._exits["south"] = ""
         self._exits["east"] = ""
