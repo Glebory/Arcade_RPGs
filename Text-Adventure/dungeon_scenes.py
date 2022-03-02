@@ -76,7 +76,7 @@ class SceneDungeonFive(scene.Scene):
                             " you are two chests, one to the left and one to the right. " \
                             "The exit is towards your <a href='south'>South</a>.<br>"
         self._exits["south"] = "dungeon3"
-        self._objects = [ci.iron_armour]
+        self._objects = []
         self._locations = {"right": "This chest has seen some wear and tear. There is an odd smell coming from it.",
                            "left": "This chest is rather dusty. It hasn't been touched in a while.",
                            "chest": "Search Left or Search Right?"}
