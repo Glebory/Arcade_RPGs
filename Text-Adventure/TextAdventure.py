@@ -31,11 +31,13 @@ trading = ("buy", "sell", "browse")
 inventory_keywords = ("equipped", "weapons", "armour", "throwables", "consumables", "misc")
 
 
-scenes = [s1.SceneOne(), s2.SceneTwo(), s2.SceneTwoPartTwo(), fs.SceneForestOne(), fs.SceneForestTwo(), ds.SceneDungeonOne(),
+scenes = [s1.SceneOne(), s2.SceneTwo(), s2.SceneTwoPartTwo(), fs.SceneForestOne(),
+          fs.SceneForestTwo(), fs.SceneForestThree(), fs.SceneForestFour(),
+          fs.SceneForestFive(), fs.SceneForestSix(), ds.SceneDungeonOne(),
           ds.SceneDungeonTwo(), ds.SceneDungeonThree(), ds.SceneDungeonFour(),
           ds.SceneDungeonFive(), ds.SceneDungeonSix(), ds.SceneDungeonSeven()]
 current_scene = s1.SceneOne()
-#if we add other classes easier to assign as player. this is for picling up items etc
+#if we add other classes easier to assign as player. this is for picking up items etc
 player = knight1
 
 def process_input(input_text):

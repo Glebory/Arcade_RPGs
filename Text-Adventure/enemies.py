@@ -51,9 +51,17 @@ class GoblinBrute(Enemy):
         self._resistances = ["Melee"]
         self._weaknesses = ["Water"]
 
+class Frog(Enemy):
+    # Frog, weak to earth, resists fire and water
+    def __init__(self, level, health, spell_list):
+        super().__init__("Goblin", level, health, spell_list, "images/frog.png")
+        self._resistances = ["Fire, Water"]
+        self._weaknesses = ["Earth"]  
+
 
 zombie = Zombie(1, 12, [a.bite])
 slime = Slime(2, 10, [a.spit])
 mimic = Mimic(2, 20, [a.bite, a.spit])
 goblin = Goblin(2, 13, [a.stab, a.shoot])
 goblin_brute = GoblinBrute(3, 25, [a.slam, a.rock_throw, s.StrengthBuff("Bulk", 2, 0, 2)])
+frog = Frog(2, 12, [a.spit, a.water_blast])
