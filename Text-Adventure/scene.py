@@ -20,6 +20,7 @@ class Scene:
         self._locations = {}
         self._npcs = {}
         self._enemy = None
+        self._loot = None
 
     def get_name(self):
         return self._name
@@ -32,6 +33,9 @@ class Scene:
 
     def get_objects(self):
         return self._objects
+
+    def add_object(self, obj):
+        self._objects.append(obj)
 
     def remove_object(self, item):
         self._objects.remove(item)
@@ -47,3 +51,9 @@ class Scene:
 
     def remove_enemy(self):
         self._enemy = None
+
+    def get_loot(self):
+        return self._loot
+
+    def remove_loot(self, string):
+        self._loot.pop(string)
