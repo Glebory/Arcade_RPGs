@@ -5,6 +5,7 @@ from inventory import *
 import npc
 import combat as c
 import enemies as e
+import item as i
 
 import scene_one as s1
 import scene_two as s2
@@ -30,15 +31,16 @@ action = ("talk", "fight", "search", "take", "inventory", "items", "equip")
 trading = ("buy", "sell", "browse")
 inventory_keywords = ("equipped", "weapons", "armour", "throwables", "consumables", "misc")
 
-
 scenes = [s1.SceneOne(), s2.SceneTwo(), s2.SceneTwoPartTwo(), fs.SceneForestOne(),
           fs.SceneForestTwo(), fs.SceneForestThree(), fs.SceneForestFour(),
           fs.SceneForestFive(), fs.SceneForestSix(), ds.SceneDungeonOne(),
           ds.SceneDungeonTwo(), ds.SceneDungeonThree(), ds.SceneDungeonFour(),
           ds.SceneDungeonFive(), ds.SceneDungeonSix(), ds.SceneDungeonSeven()]
+
 current_scene = s1.SceneOne()
-#if we add other classes easier to assign as player. this is for picking up items etc
+# if we add other classes easier to assign as player. this is for picking up items etc
 player = knight1
+
 
 def process_input(input_text):
     global current_scene
@@ -52,6 +54,7 @@ def process_input(input_text):
                       "go/move/exit/leave/travel/walk (direction)- movement<br>" \
                       "talk (character)- to characters<br>" \
                       "search - the surroundings<br>" \
+                      "search (point of interest) - searches a specific place e.g. a box<br>" \
                       "take (item name)- an item<br>" \
                       "inventory/items - items you have<br>"\
                       "equip (item name) - equip an item to yourself<br>"\
@@ -60,11 +63,57 @@ def process_input(input_text):
     # action within a scene
     if command in action:
         if command == "search":
+            if len(input_words) == 2:
+                target_location = input_words[1]
+                locations = current_scene.get_locations()
+                if target_location == "ground" or target_location == "floor":
+                    sceneObjects = current_scene.get_objects()
+                    if len(sceneObjects) == 0:
+                        output_text = "You look around but don't find anything interesting.<br>"
+                        return
+                    output_text = "You can see: <br>"
+                    for obj in sceneObjects:
+                        output_text += obj.get_name() + " - " + obj.get_description() + "<br>"
+                    return
+
+                if target_location not in locations:
+                    output_text = "You don't find that here.<br>"
+                    return
+                output_text = "%s<br>" % locations[target_location]
+                if target_location in current_scene.get_loot().keys():
+                    # can be either an item or an enemy in hiding
+                    found_object = current_scene.get_loot()[target_location]
+                    if isinstance(found_object, i.Item):
+                        output_text += "You found a: <br>"
+                        output_text += "%s<br>" % found_object
+                        current_scene.add_object(found_object)
+                        current_scene.remove_loot(target_location)
+                        return
+                    # else it's an enemy
+                    else:
+                        outcome = c.combat(player, found_object, ui_manager, screen)
+                        ui_manager.set_focus_set(text_entry)
+                        if outcome == "FLEE":
+                            current_scene = s1.SceneOne()
+                            output_text = "You escape the area...<br>"
+                            return
+                        elif outcome == "LOSE":
+                            output_text = "Game Over<br>"
+                            # game over stuff (client closes?)
+                            return
+                        else:
+                            output_text = ("You defeated the %s!<br>" % found_object) \
+                                          + output_text
+                            current_scene.remove_loot(target_location)
+                            return
+
+            if output_text:
+                return
             sceneObjects = current_scene.get_objects()
             if len(sceneObjects) == 0:
-                output_text = "You look around but don't find anything interesting.<br>"
+                output_text += "You look around but don't find anything interesting.<br>"
                 return
-            output_text = "You can see: <br>"
+            output_text += "You can see: <br>"
             for obj in sceneObjects:
                 output_text += obj.get_name() + " - " + obj.get_description() + "<br>"
 
@@ -96,37 +145,10 @@ def process_input(input_text):
                     current_scene.remove_object(item)
                 else:
                     output_text = "That item isn't here! <br>"
-            #else:
-            #    output_text = command + " what? <br>"
 
         if command == "items" or command == "inventory":
-            output_text = "You are wearing: <br>"
-            output_text = "What would you like to see? <br> -Equipped<br> -Weapons<br>"\
-                            " -Armour<br> -Throwables<br> -Consumables<br> -Misc<br> ------------ <br>"
-            inv = player.get_inventory()
-
-    
-    if command in inventory_keywords:
-        inv = player.get_inventory()
-        output_text = ""
-        if command == "equipped":
-            output_text += str(player.get_weapon()) + "<br>"
-            output_text += str(player.get_armour()) + "<br>"
-        if command == "weapons":
-            for weapon in inv.get_weapons().values():
-                output_text += str(weapon[0]) + ". Amount: " + str(weapon[1]) + "<br>"
-        if command == "armour":
-            for armour in inv.get_armour().values():
-                output_text += str(armour[0]) + ". Amount: " + str(armour[1]) + "<br>"
-        if command == "throwables":
-            for throwable in inv.get_throwables().values():
-                output_text += str(throwable[0]) + ". Amount: " + str(throwable[1]) + "<br>"
-        if command == "consumables":
-            for consumable in inv.get_consumables().values():
-                output_text += str(consumable[0]) + ". Amount: " + str(consumable[1]) + "<br>"
-        if command == "misc":
-            for other in inv.get_other().values():
-                output_text += str(other[0]) + ". Amount: " + str(other[1]) + "<br>"
+            output_text = "What would you like to see? <br>  Equipped, Weapons, " \
+                          "Armour, Throwables, Consumables, Misc<br>"
 
         if command == "equip":
             item = ""
@@ -160,6 +182,33 @@ def process_input(input_text):
                               " moved to your inventory.<br>"
             else:
                 output_text = "You cannot equip that!<br>"
+
+    if command in inventory_keywords:
+        inv = player.get_inventory()
+        if command == "equipped":
+            output_text = "You are wearing: <br>"
+            output_text += str(player.get_weapon()) + "<br>"
+            output_text += str(player.get_armour()) + "<br>"
+        if command == "weapons":
+            output_text = "Weapons you have: <br>"
+            for weapon in inv.get_weapons().values():
+                output_text += str(weapon[0]) + ". Amount: " + str(weapon[1]) + "<br>"
+        if command == "armour":
+            output_text = "Armour you have: <br>"
+            for armour in inv.get_armour().values():
+                output_text += str(armour[0]) + ". Amount: " + str(armour[1]) + "<br>"
+        if command == "throwables":
+            output_text = "Throwing items you have: <br>"
+            for throwable in inv.get_throwables().values():
+                output_text += str(throwable[0]) + ". Amount: " + str(throwable[1]) + "<br>"
+        if command == "consumables":
+            output_text = "Consumable items you have: <br>"
+            for consumable in inv.get_consumables().values():
+                output_text += str(consumable[0]) + ". Amount: " + str(consumable[1]) + "<br>"
+        if command == "misc":
+            output_text = "Other items you have: <br>"
+            for other in inv.get_other().values():
+                output_text += str(other[0]) + ". Amount: " + str(other[1]) + "<br>"
 
     if command in trading:
         if "merchant" not in current_scene.get_npcs().keys():
@@ -224,11 +273,12 @@ def process_input(input_text):
                                                   + output_text
                                     current_scene.remove_enemy()
             elif direction in locations:
-                output_text = locations[direction]
+                output_text = "%s<br>" % locations[direction]
             else:
                 output_text = "There is no exit there! <br>"
         else:
             output_text = command + " where? <br>"
+
 
 def process_clicks(target):
     global current_scene
@@ -310,6 +360,7 @@ def main():
         ui_manager.update(time_delta)
         ui_manager.draw_ui(screen)
         pygame.display.flip()
+
 
 if __name__ == '__main__':
     main()
