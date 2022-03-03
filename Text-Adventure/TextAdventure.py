@@ -23,6 +23,7 @@ text_entry = pygame_gui.elements.UITextEntryLine(pygame.Rect((10, 420), (620, 40
 ui_manager.set_focus_set(text_entry)
 
 clock = pygame.time.Clock()
+running = True
 
 # keywords for moving between scenes
 movement = ("go", "move", "exit", "leave", "travel", "walk")
@@ -45,6 +46,7 @@ player = knight1
 def process_input(input_text):
     global current_scene
     global output_text
+    global running
     input_words = input_text.split()
     if not input_words:
         return
@@ -100,6 +102,7 @@ def process_input(input_text):
                         elif outcome == "LOSE":
                             output_text = "Game Over<br>"
                             # game over stuff (client closes?)
+                            running = False
                             return
                         else:
                             output_text = ("You defeated the %s!<br>" % found_object) \
@@ -272,6 +275,7 @@ def process_input(input_text):
                                 elif outcome == "LOSE":
                                     output_text = "Game Over<br>"
                                     # game over stuff (client closes?)
+                                    running = True
                                 else:
                                     output_text = ("You defeated the %s!<br>" % current_scene.get_enemy()) \
                                                   + output_text
@@ -287,6 +291,7 @@ def process_input(input_text):
 def process_clicks(target):
     global current_scene
     global output_text
+    global running
 
     if target in ("north", "south", "east", "west"):
         exits = current_scene.get_exits()
@@ -308,6 +313,7 @@ def process_clicks(target):
                             output_text = "You escape the area...<br>"
                         elif outcome == "LOSE":
                             output_text = "Game Over<br>"
+                            running = False
                             # game over stuff (client closes?)
                         else:
                             output_text = ("You defeated the %s!<br>" % current_scene.get_enemy()) \
@@ -329,8 +335,8 @@ def process_clicks(target):
 def main():
     global current_scene
     global output_text
+    global running
     started = True
-    running = True
     time_delta = clock.tick(60) / 1000.0
 
     while running:
@@ -363,7 +369,6 @@ def main():
                 textbox.append_html_text(output_text)
                 output_text = ""
                 textbox.rebuild()
-
 
         ui_manager.update(time_delta)
         ui_manager.draw_ui(screen)
