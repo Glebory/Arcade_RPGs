@@ -37,17 +37,7 @@ class Merchant(NPC):
         return self._inv
 
     def buy_from_merchant(self, item_str, player):
-        item = None
-        if get_item_object(self._inv.get_weapons(), item_str.upper()):
-            item = get_item_object(self._inv.get_weapons(), item_str.upper())
-        if get_item_object(self._inv.get_armour(), item_str.upper()):
-            item = get_item_object(self._inv.get_armour(), item_str.upper())
-        if get_item_object(self._inv.get_throwables(), item_str.upper()):
-            item = get_item_object(self._inv.get_throwables(), item_str.upper())
-        if get_item_object(self._inv.get_consumables(), item_str.upper()):
-            item = get_item_object(self._inv.get_consumables(), item_str.upper())
-        if get_item_object(self._inv.get_other(), item_str.upper()):
-            item = get_item_object(self._inv.get_other(), item_str.upper())
+        item = self._inv.find_item(item_str)
         if not item:
             return "The merchant does not have " + item_str + ".<br>"
         item_cost = item.get_value()
@@ -62,18 +52,7 @@ class Merchant(NPC):
             return "Not enough coin!<br>"
 
     def sell_to_merchant(self, item_str, player):
-        item = None
-        player_inv = player.get_inventory()
-        if get_item_object(player_inv.get_weapons(), item_str.upper()):
-            item = get_item_object(player_inv.get_weapons(), item_str.upper())
-        if get_item_object(player_inv.get_armour(), item_str.upper()):
-            item = get_item_object(player_inv.get_armour(), item_str.upper())
-        if get_item_object(player_inv.get_throwables(), item_str.upper()):
-            item = get_item_object(player_inv.get_throwables(), item_str.upper())
-        if get_item_object(player_inv.get_consumables(), item_str.upper()):
-            item = get_item_object(player_inv.get_consumables(), item_str.upper())
-        if get_item_object(player_inv.get_other(), item_str.upper()):
-            item = get_item_object(player_inv.get_other(), item_str.upper())
+        item = player.get_inventory().find_item(item_str)
         if not item:
             return "You do not have " + item_str + ".<br>"
         item_cost = item.get_value()

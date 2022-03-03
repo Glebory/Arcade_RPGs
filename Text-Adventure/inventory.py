@@ -90,3 +90,18 @@ class Inventory:
 
     def get_other(self):
         return self._other
+
+    def find_item(self, item_str):
+        item = None
+        if get_item_object(self._weapons, item_str.upper()):
+            item = get_item_object(self._weapons, item_str.upper())
+        if get_item_object(self._armour, item_str.upper()):
+            item = get_item_object(self._armour, item_str.upper())
+        if get_item_object(self._throwables, item_str.upper()):
+            item = get_item_object(self._throwables, item_str.upper())
+        if get_item_object(self._consumables, item_str.upper()):
+            item = get_item_object(self._consumables, item_str.upper())
+        if get_item_object(self._other, item_str.upper()):
+            item = get_item_object(self._other, item_str.upper())
+        return item
+
