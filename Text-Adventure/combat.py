@@ -94,12 +94,12 @@ def attack(attacker, defender, textbox):
         damage_type = attacker.get_weapon().get_bonus()
     else:
         base_damage = attacker.get_strength() - defender.get_armour().get_defense()
-        damage_type = None
+        damage_type = "Melee"
     damage = damageChecker(base_damage, damage_type, defender)
     if damage < 1:
         damage = 1
     defender.take_damage(damage)
-    textbox.append_html_text("%s attacks, %s takes %i damage<br>" % (attacker, defender, damage))
+    textbox.append_html_text("%s attacks, %s takes %i %s damage<br>" % (attacker, defender, damage, damage_type))
 
 
 # takes input from the player
@@ -133,7 +133,8 @@ def playerAction(player, enemy, ui_manager, screen, textbox, text_entry):
                 damage = damageChecker(chosen_spell.get_damage(), chosen_spell.get_damage_type(), enemy)
                 enemy.take_damage(damage)
                 textbox.append_html_text(
-                    "%s %s, dealing %i damage to %s<br>" % (player, chosen_spell.get_flavour_text(), damage, enemy))
+                    "%s %s, dealing %i %s damage to %s<br>" % (player, chosen_spell.get_flavour_text(),
+                                                               damage, chosen_spell.get_damage_type(), enemy))
             elif isinstance(chosen_spell, s.StrengthDeBuff):
                 if chosen_spell not in enemy_buffs:
                     chosen_spell.cast(enemy)
@@ -175,7 +176,8 @@ def playerAction(player, enemy, ui_manager, screen, textbox, text_entry):
             damage = damageChecker(chosen_item.get_damage(), chosen_item.get_damage_type(), enemy)
             enemy.take_damage(damage)
             textbox.append_html_text(
-                "%s throws their %s, dealing %i damage to %s<br>" % (player, chosen_item.get_name(), damage, enemy))
+                "%s throws their %s, dealing %i %s damage to %s<br>" % (player, chosen_item.get_name(),
+                                                                        damage, chosen_item.get_damage_type(), enemy))
 
         if isinstance(chosen_item, i.HealthGiver):
             chosen_item.consume(player)
@@ -220,7 +222,8 @@ def enemyAction(player, enemy, textbox):
             damage = damageChecker(chosen_spell.get_damage(), chosen_spell.get_damage_type(), player)
             player.take_damage(damage)
             textbox.append_html_text(
-                "%s %s, dealing %i damage to %s<br>" % (enemy, chosen_spell.get_flavour_text(), damage, player))
+                "%s %s, dealing %i %s damage to %s<br>" % (enemy, chosen_spell.get_flavour_text(),
+                                                           damage, chosen_spell.get_damage_type(), player))
         elif isinstance(chosen_spell, s.StrengthDeBuff):
             # only casts if not already buffed or debuffed, as otherwise
             # it would cause strength to not be put back to normal
@@ -246,7 +249,6 @@ def combat(player, enemy, ui_manager, screen):
     text_entry = pygame_gui.elements.UITextEntryLine(pygame.Rect((10, 420), (620, 40)), ui_manager)
     image = pygame.image.load(enemy.get_image())
     imagebox = pygame_gui.elements.UIImage(pygame.Rect((492, 10), (128, 128)), image, ui_manager)
-    # (556, 336), (620, 400)
     ui_manager.set_focus_set(text_entry)
 
     turn_count = 0
@@ -281,7 +283,7 @@ def combat(player, enemy, ui_manager, screen):
         else:
             continue_combat = False
 
-    if fleeCheck:
+    if fleeCheck and player.get_current_health() > 0:
         clearBuffs(player, enemy)
         textbox.append_html_text("Player flees...<br>")
         outcome = "FLEE"
