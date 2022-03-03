@@ -113,3 +113,4 @@ class SceneDungeonSeven(scene.Scene):
         self._npcs = {}
         self._enemy = e.goblin_brute
         self._loot = {"chest": ci.flame_sword}
+        self._requirements = ci.d_key

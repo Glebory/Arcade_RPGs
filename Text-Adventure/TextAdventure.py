@@ -257,6 +257,10 @@ def process_input(input_text):
                 if exitName is not None:
                     for scene in scenes:
                         if exitName == scene.get_name():
+                            if scene.get_requirements() is not None:
+                                if player.get_inventory().find_item(scene.get_requirements().get_name()) is None:
+                                    output_text = "It's locked!<br>"
+                                    return
                             current_scene = scene
                             output_text = current_scene.get_description()
                             if current_scene.get_enemy():
@@ -290,6 +294,10 @@ def process_clicks(target):
         if exitName is not None:
             for scene in scenes:
                 if exitName == scene.get_name():
+                    if scene.get_requirements() is not None:
+                        if player.get_inventory().find_item(scene.get_requirements().get_name()) is None:
+                            output_text = "It's locked!<br>"
+                            return
                     current_scene = scene
                     output_text = current_scene.get_description()
                     if current_scene.get_enemy():

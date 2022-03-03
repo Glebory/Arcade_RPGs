@@ -21,6 +21,7 @@ class Scene:
         self._npcs = {}
         self._enemy = None
         self._loot = None
+        self._requirements = None
 
     def get_name(self):
         return self._name
@@ -57,3 +58,6 @@ class Scene:
 
     def remove_loot(self, string):
         self._loot.pop(string)
+
+    def get_requirements(self):
+        return self._requirements
