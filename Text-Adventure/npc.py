@@ -87,3 +87,11 @@ man.set_description("A strange looking man.<br>")
 man.set_speech("The man warns you about a creature on the other side of the door."
                " Remember to use attack/spell/item/flee during combat. Use 'help' for commands."
                "<br>")
+
+fisherman = NPC("Adam", 1, 1)
+fisherman.set_description("A Tall Fisherman.<br>")
+fisherman.set_speech("The fisherman tells you ahead is an impassable waterfall and it would be best to turn back.<br>")
+
+fishermans_son = NPC("Tommy", 1, 1)
+fishermans_son.set_description("Young boy.<br>")
+fishermans_son.set_speech("The young boy tells you that he saw a smuggler hiding behind the vines under a big cliff.<br>")

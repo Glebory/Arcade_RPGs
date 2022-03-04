@@ -54,10 +54,26 @@ class GoblinBrute(Enemy):
 class Frog(Enemy):
     # Frog, weak to earth, resists fire and water
     def __init__(self, level, health, spell_list):
-        super().__init__("Goblin", level, health, spell_list, "images/frog.png")
+        super().__init__("Frog", level, health, spell_list, "images/frog.png")
         self._resistances = ["Fire, Water"]
         self._weaknesses = ["Earth"]  
 
+class Werewolf(Enemy):
+    # Frog, weak to earth, resists fire and water
+    def __init__(self, level, health, spell_list):
+        super().__init__("Werewolf", level, health, spell_list, "images/werewolf.png")
+        self._weaknesses = ["Fire"]  
+
+class Bear(Enemy):
+    def __init__(self, level, health, spell_list):
+            super().__init__("Bear", level, health, spell_list, "images/bear.png")
+            self._resistances = ["Earth", "Ranged"]
+
+class Boar(Enemy):
+    def __init__(self, level, health, spell_list):
+            super().__init__("Boar", level, health, spell_list, "images/boar.png")
+            self._resistances = ["Ranged"]
+            self._weaknesses = ["Fire"]
 
 zombie = Zombie(1, 12, [a.bite])
 slime = Slime(2, 10, [a.spit])
@@ -65,3 +81,6 @@ mimic = Mimic(2, 20, [a.bite, a.spit])
 goblin = Goblin(2, 13, [a.stab, a.shoot])
 goblin_brute = GoblinBrute(3, 25, [a.slam, a.rock_throw, s.StrengthBuff("Bulk", 2, 0, 2)])
 frog = Frog(2, 12, [a.spit, a.water_blast])
+werewolf = Werewolf(3, 15, [a.bite, a.maul])
+bear = Bear(2, 10, [a.bite, a.maul])
+boar = Boar(3, 6, [a.charge])

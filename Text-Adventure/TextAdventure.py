@@ -34,7 +34,8 @@ inventory_keywords = ("equipped", "weapons", "armour", "throwables", "consumable
 
 scenes = [s1.SceneOne(), s2.SceneTwo(), s2.SceneTwoPartTwo(), fs.SceneForestOne(),
           fs.SceneForestTwo(), fs.SceneForestThree(), fs.SceneForestFour(),
-          fs.SceneForestFive(), fs.SceneForestSix(), ds.SceneDungeonOne(),
+          fs.SceneForestFive(), fs.SceneForestSix(), fs.SceneForestSeven(), 
+          fs.SceneForestEight(), fs.SceneForestNine(), fs.SceneForestTen(), ds.SceneDungeonOne(),
           ds.SceneDungeonTwo(), ds.SceneDungeonThree(), ds.SceneDungeonFour(),
           ds.SceneDungeonFive(), ds.SceneDungeonSix(), ds.SceneDungeonSeven()]
 
