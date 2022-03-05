@@ -50,6 +50,7 @@ def process_input(input_text):
     global output_text
     global running
     global player
+    player_class = ""
     input_words = input_text.split()
     if not input_words:
         return
@@ -57,11 +58,14 @@ def process_input(input_text):
     if current_scene.get_name() == "char_select":
         if command == "knight":
             player = knight1
+            player_class = "Knight"
         elif command == "wizard":
             player = wizard1
+            player_class = "Wizard"
         elif command == "archer":
             player = archer1
-        output_text =  "You chose " + player.get_name() + ".<br>Type 'go north' to walk into the mist"\
+            player_class = "Archer"
+        output_text =  "You chose " + player_class + ".<br>Type 'go north' to walk into the mist"\
                         " and begin your adventure<br>"
         player.set_name(playername) #sets the playername a second time after class is assigned 
         
