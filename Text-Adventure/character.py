@@ -3,7 +3,7 @@ import created_items as ci
 import item
 import attacks as a
 import spells as s
-
+#if adding a class, add in combat and textadventure as options
 
 class Character:
     """
@@ -29,6 +29,9 @@ class Character:
 
     def set_name(self, name):
         self._name = name
+    
+    def get_name(self):
+        return self._name
 
     # keeps current health within bounds of total health
     def health_check(self):
@@ -151,7 +154,83 @@ class Player_swordsman(Character):
             self._spells.append(spell)
 
 
-knight1 = Player_swordsman("Bertrand", 1, 10, ci.longsword, ci.cloth_armour)
+class Player_wizard(Character):
+    # either the only player option or one of many, bard, mage, etc
+    def __init__(self, name, level, health, weapon, armour, resistances=[]):
+        super().__init__(name, level, health)
+        self._resistances = ["Fire"]
+        self._weapon = weapon
+        self._armour = armour
+        self._inv = inv.Inventory()
+        self._spells = []
+
+    def get_weapon(self):
+        return self._weapon
+
+    def set_weapon(self, weapon):
+        self._weapon = weapon
+
+    def get_armour(self):
+        return self._armour
+
+    def set_armour(self, armour):
+        self._armour = armour
+
+    def get_inventory(self):
+        return self._inv
+
+    def add_item(self, item):
+        self._inv.add(item)
+
+    def remove_item(self, item):
+        self._inv.remove(item)
+
+    def get_spells(self):
+        return self._spells
+
+    def add_spell(self, spell):
+        if spell not in self._spells:
+            self._spells.append(spell)
+
+class Player_archer(Character):
+    # either the only player option or one of many, bard, mage, etc
+    def __init__(self, name, level, health, weapon, armour, resistances=[]):
+        super().__init__(name, level, health)
+        self._resistances = ["Ranged"]
+        self._weapon = weapon
+        self._armour = armour
+        self._inv = inv.Inventory()
+        self._spells = []
+
+    def get_weapon(self):
+        return self._weapon
+
+    def set_weapon(self, weapon):
+        self._weapon = weapon
+
+    def get_armour(self):
+        return self._armour
+
+    def set_armour(self, armour):
+        self._armour = armour
+
+    def get_inventory(self):
+        return self._inv
+
+    def add_item(self, item):
+        self._inv.add(item)
+
+    def remove_item(self, item):
+        self._inv.remove(item)
+
+    def get_spells(self):
+        return self._spells
+
+    def add_spell(self, spell):
+        if spell not in self._spells:
+            self._spells.append(spell)
+
+knight1 = Player_swordsman("Swordsman", 1, 10, ci.longsword, ci.cloth_armour)
 knight1.add_item(ci.stick)
 knight1.add_item(ci.heal_potion)
 knight1.add_item(ci.heal_potion)
@@ -171,3 +250,43 @@ knight1.add_spell(a.shard)
 knight1.add_spell(a.rock_throw)
 knight1.add_spell(a.shard)
 knight1.add_spell(s.Heal("Minor Heal", 10, 5))
+
+wizard1 = Player_wizard("Wizard", 1, 10, ci.staff, ci.cloth_armour)
+wizard1.add_item(ci.heal_potion)
+wizard1.add_item(ci.heal_potion)
+wizard1.add_item(ci.heal_potion)
+wizard1.add_item(ci.mana_potion)
+wizard1.add_item(ci.mana_potion)
+wizard1.add_item(ci.mana_potion)
+
+wizard1.add_item(ci.coin)
+wizard1.add_item(ci.coin)
+wizard1.add_item(ci.coin)
+wizard1.add_item(ci.coin)
+wizard1.add_item(ci.coin)
+
+wizard1.add_spell(a.fireball)
+wizard1.add_spell(a.shard)
+wizard1.add_spell(a.earth_fist)
+wizard1.add_spell(s.Heal("Minor Heal", 10, 5))
+
+
+wizard1.set_total_mana(30)
+wizard1.set_current_mana(30)
+
+
+archer1=Player_archer("Archer", 1, 10, ci.dagger, ci.leather_armour)
+archer1.add_item(ci.heal_potion)
+archer1.add_item(ci.heal_potion)
+archer1.add_item(ci.heal_potion)
+
+archer1.add_item(ci.coin)
+archer1.add_item(ci.coin)
+archer1.add_item(ci.coin)
+archer1.add_item(ci.coin)
+archer1.add_item(ci.coin)
+
+archer1.add_spell(a.shoot1)
+archer1.add_spell(a.fire_arrow)
+archer1.add_spell(a.ice_arrow)
+archer1.add_spell(s.Heal("Minor Heal", 10, 5))

@@ -12,7 +12,7 @@ class SceneForestOne(scene.Scene):
         self._description = "The hole leads to a forest, you can barely see the moon peek through the thick canopy above.<br>"\
                             "There is a smaller path leading <a href='west'>West</a> which splits off the main path. " \
                             "The main path continues <a href='north'>North</a>. To the <a href='east'>East</a> is rugged forest terrain with no path."\
-                            " <a href='south'>South</a> leads back twoards the house.<br>"
+                            " <a href='south'>South</a> leads back towards the hole in the wall.<br>"
         self._exits["north"] = "forest3"
         self._exits["east"] = "forest4"
         self._exits["west"] = "forest2"
@@ -26,7 +26,7 @@ class SceneForestTwo(scene.Scene):
     def __init__(self):
         super().__init__()
         self._name = "forest2"
-        self._description = "You follow the smaller path west and arrive at a small grove.<br> " \
+        self._description = "You follow the smaller path west and arrive at a small grove.<br>" \
                             "There is no path leading forward only back <a href='east'>East</a> from where you came.<br>"\
                             "In the centre of the grove you see the dead remains of a man.<br>"
         self._exits["north"] = ""

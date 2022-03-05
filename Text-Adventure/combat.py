@@ -89,7 +89,7 @@ def playerInput(command_list, ui_manager, screen, textbox, text_entry):
 # calculates overall damage when a character attacks its enemy
 def attack(attacker, defender, textbox):
     # change when there is more classes
-    if isinstance(attacker, Player_swordsman):
+    if isinstance(attacker, Player_swordsman) or isinstance(attacker, Player_wizard) or isinstance(attacker, Player_archer):
         base_damage = attacker.get_strength() + attacker.get_weapon().get_attack()
         damage_type = attacker.get_weapon().get_bonus()
     else:

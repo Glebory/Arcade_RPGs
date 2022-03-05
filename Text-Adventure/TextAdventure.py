@@ -7,6 +7,7 @@ import combat as c
 import enemies as e
 import item as i
 
+import character_scene as cs
 import scene_one as s1
 import scene_two as s2
 import forest_scenes as fs
@@ -32,14 +33,14 @@ action = ("talk", "fight", "search", "take", "inventory", "items", "equip")
 trading = ("buy", "sell", "browse")
 inventory_keywords = ("equipped", "weapons", "armour", "throwables", "consumables", "misc")
 
-scenes = [s1.SceneOne(), s2.SceneTwo(), s2.SceneTwoPartTwo(), fs.SceneForestOne(),
+scenes = [cs.CharSel(), s1.SceneOne(), s2.SceneTwo(), s2.SceneTwoPartTwo(), fs.SceneForestOne(),
           fs.SceneForestTwo(), fs.SceneForestThree(), fs.SceneForestFour(),
           fs.SceneForestFive(), fs.SceneForestSix(), fs.SceneForestSeven(), 
           fs.SceneForestEight(), fs.SceneForestNine(), fs.SceneForestTen(), ds.SceneDungeonOne(),
           ds.SceneDungeonTwo(), ds.SceneDungeonThree(), ds.SceneDungeonFour(),
           ds.SceneDungeonFive(), ds.SceneDungeonSix(), ds.SceneDungeonSeven()]
 
-current_scene = s1.SceneOne()
+current_scene = cs.CharSel()
 # if we add other classes easier to assign as player. this is for picking up items etc
 player = knight1
 
@@ -48,10 +49,22 @@ def process_input(input_text):
     global current_scene
     global output_text
     global running
+    global player
     input_words = input_text.split()
     if not input_words:
         return
     command = input_words[0]
+    if current_scene.get_name() == "char_select":
+        if command == "knight":
+            player = knight1
+        elif command == "wizard":
+            player = wizard1
+        elif command == "archer":
+            player = archer1
+        output_text =  "You chose " + player.get_name() + ".<br>Type 'go north' to walk into the mist"\
+                        " and begin your adventure<br>"
+        player.set_name(playername) #sets the playername a second time after class is assigned 
+        
     if command == "help":
         output_text = "Available commands:<br>" \
                       "go/move/exit/leave/travel/walk (direction)- movement<br>" \
@@ -293,6 +306,7 @@ def process_clicks(target):
     global current_scene
     global output_text
     global running
+    global player
 
     if target in ("north", "south", "east", "west"):
         exits = current_scene.get_exits()
@@ -337,6 +351,9 @@ def main():
     global current_scene
     global output_text
     global running
+    global playername
+    global player
+
     started = True
     time_delta = clock.tick(60) / 1000.0
 
