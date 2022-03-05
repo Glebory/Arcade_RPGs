@@ -23,6 +23,7 @@ class Game:
         while game_loop:
             if self._tilemap._player1._counter > 0:
                 self._tilemap._player1._counter -= 1
+
             self.window.fill((192, 68, 143))
             self.window.blit(self._background, [0,0])
             self._tilemap.draw()
@@ -31,7 +32,7 @@ class Game:
 
             if self._tilemap._player1.health > 0:
                 self.window.blit(self._tilemap._player1.image, self._tilemap._player1.rect)
-                self._tilemap._player1.move()
+                self._tilemap._player1.move(self._tilemap._items)
                 self._tilemap._player1.jump()
                 self._tilemap._player1._remaining_health.draw(self.window)
 
