@@ -1,17 +1,25 @@
 import pygame
+from gameobjects import GameObjects
 
-
-class Character:
-    def __init__(self, position):
-        self._position = position
+class Character(GameObjects):
+    def __init__(self, position, health):
+        super().__init__(position)
+        self._health = health
+        self._segment = 75
 
     def __str__(self):
         return "%s" % self._position
 
-    @property 
-    def position(self):
-        return self._position
+    @property
+    def health(self):
+        return self._health
 
-    @position.setter
-    def position(self, new_position):
-        self._position = new_position
+    @health.setter
+    def health(self, new_health):
+        self._health = new_health
+
+    def boundaries(self):
+        if self.rect.x <= 0:
+            self.rect.x = 0
+        elif self.rect.x >= 1100:
+            self.rect.x = 1100

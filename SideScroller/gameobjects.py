@@ -21,3 +21,10 @@ class GameObjects(pygame.sprite.Sprite):
     @image.setter
     def image(self, new_image):
         self._image = new_image
+
+    def check_player_collision(self, player):
+        if self.rect.colliderect(player):
+            player._health -= 1
+            if player._health == self._segment:
+                self._segment -= 25
+                player.del_health()
