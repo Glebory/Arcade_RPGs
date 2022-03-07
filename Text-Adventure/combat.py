@@ -112,12 +112,15 @@ def playerAction(player, enemy, ui_manager, screen, textbox, text_entry):
         textbox.append_html_text("Choose a spell from:<br>")
         choices = []
         spell_reference = []
+        choices_str = ""
         # sets list of spells up for use in playerInput(), with names in upper case
         for spell in player.get_spells():
             name = spell.get_name().upper()
             choices.append(name)
             spell_reference.append([name, spell])
-        textbox.append_html_text("%s<br><br>" % choices)
+        for spell in choices:
+            choices_str += "%s, " % spell
+        textbox.append_html_text("%s<br><br>" % choices_str[:-2])
         chosen_spell_str = playerInput(choices, ui_manager, screen, textbox, text_entry)
         chosen_spell = ""
 
@@ -158,12 +161,15 @@ def playerAction(player, enemy, ui_manager, screen, textbox, text_entry):
         throwables = player.get_inventory().get_throwables()
         consumables = player.get_inventory().get_consumables()
         choices = []
+        choices_str = ""
         # player chooses item from consumables and throwables
         for item in throwables:
             choices.append(item.upper())
         for item in consumables:
             choices.append(item.upper())
-        textbox.append_html_text("%s<br><br>" % choices)
+        for item in choices:
+            choices_str += "%s, " % item
+        textbox.append_html_text("%s<br><br>" % choices_str[:-2])
         chosen_item_str = playerInput(choices, ui_manager, screen, textbox, text_entry)
         # checks from which inventory the chosen item is from
         if inv.get_item_object(throwables, chosen_item_str):
@@ -183,6 +189,11 @@ def playerAction(player, enemy, ui_manager, screen, textbox, text_entry):
             chosen_item.consume(player)
             textbox.append_html_text(
                 "%s drinks their %s, healing %i HP<br>" % (player, chosen_item.get_name(), chosen_item.get_points()))
+
+        if isinstance(chosen_item, i.ManaGiver):
+            chosen_item.consume(player)
+            textbox.append_html_text(
+                "%s drinks their %s, restoring %i Mana<br>" % (player, chosen_item.get_name(), chosen_item.get_points()))
 
         if isinstance(chosen_item, i.ResistanceGiver):
             item_turns = chosen_item.consume(player)
