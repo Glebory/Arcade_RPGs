@@ -35,7 +35,7 @@ inventory_keywords = ("equipped", "weapons", "armour", "throwables", "consumable
 
 scenes = [cs.CharSel(), s1.SceneOne(), s2.SceneTwo(), s2.SceneTwoPartTwo(), fs.SceneForestOne(),
           fs.SceneForestTwo(), fs.SceneForestThree(), fs.SceneForestFour(),
-          fs.SceneForestFive(), fs.SceneForestSix(), fs.SceneForestSeven(), 
+          fs.SceneForestFive(), fs.SceneForestSix(), fs.SceneForestSeven(),
           fs.SceneForestEight(), fs.SceneForestNine(), fs.SceneForestTen(), ds.SceneDungeonOne(),
           ds.SceneDungeonTwo(), ds.SceneDungeonThree(), ds.SceneDungeonFour(),
           ds.SceneDungeonFive(), ds.SceneDungeonSix(), ds.SceneDungeonSeven()]
@@ -65,10 +65,14 @@ def process_input(input_text):
         elif command == "archer":
             player = archer1
             player_class = "Archer"
-        output_text =  "You chose " + player_class + ".<br>Type 'go north' to walk into the mist"\
-                        " and begin your adventure<br>"
-        player.set_name(playername) #sets the playername a second time after class is assigned 
-        
+        else:
+            output_text += "Command not recognised. Defaulting to knight class.<br>"
+            player = knight1
+            player_class = "Knight"
+        output_text += "You chose " + player_class + ".<br>Type 'go north' to walk into the mist" \
+                                                     " and begin your adventure.<br>"
+        player.set_name(playername)  # sets the playername a second time after class is assigned
+
     if command == "help":
         output_text = "Available commands:<br>" \
                       "go/move/exit/leave/travel/walk (direction)- movement<br>" \
@@ -76,8 +80,8 @@ def process_input(input_text):
                       "search - the surroundings<br>" \
                       "search (point of interest) - searches a specific place e.g. a box<br>" \
                       "take (item name)- an item<br>" \
-                      "inventory/items - items you have<br>"\
-                      "equip (item name) - equip an item to yourself<br>"\
+                      "inventory/items - items you have<br>" \
+                      "equip (item name) - equip an item to yourself<br>" \
                       "browse - trader's items<br>" \
                       "buy/sell (item name) - trade with a trader<br>"
     # action within a scene
@@ -147,7 +151,7 @@ def process_input(input_text):
                 target = input_words[1]
                 if target in npcs:
                     output_text = npcs[target].get_speech()
-        
+
         if command == "take":
             target_object = ""
             if len(input_words) == 2:
@@ -192,7 +196,7 @@ def process_input(input_text):
                 player.add_item(old_weapon)
                 player.remove_item(weapon)
                 output_text = "You have equipped " + weapon.get_name() + ".<br>" + old_weapon.get_name() + " has been" \
-                              " moved to your inventory.<br>"
+                                                                                                           " moved to your inventory.<br>"
             if get_item_object(player_inv.get_armour(), item.upper()):
                 armour = get_item_object(player_inv.get_armour(), item.upper())
                 old_armour = player.get_armour()
@@ -200,7 +204,7 @@ def process_input(input_text):
                 player.add_item(old_armour)
                 player.remove_item(armour)
                 output_text = "You have equipped " + armour.get_name() + ".<br>" + old_armour.get_name() + " has been" \
-                              " moved to your inventory.<br>"
+                                                                                                           " moved to your inventory.<br>"
             else:
                 output_text = "You cannot equip that!<br>"
 

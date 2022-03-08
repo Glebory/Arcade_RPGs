@@ -4,20 +4,25 @@ import pygame
 import player
 import enemy
 import stairs
-import water
+import cave
+
 
 class TileMap:
     def __init__(self):
-        self._level = 1
-        self._rows = 19
+        self._level = 2
+        self._rows = 15
         self._cols = 150
     #    self._size = 1160 // self._rows
         self._size = 48
-        self._types = 25  # NUMBER OF DIFFERENT TILES USED
+        self._types = 27  # NUMBER OF DIFFERENT TILES USED
         self.images = []
         self._map = []
         self._items = []
-        self._obstacles = []
+        self._water = []
+        self._coffin = []
+        self._respawnpt = []
+        self._cave_group = pygame.sprite.Group()
+        self._enemy_group = pygame.sprite.Group()
         self.update()
         self.draw()
 
@@ -45,25 +50,28 @@ class TileMap:
                     self.rect = self.image.get_rect()
                     self.rect.center = (x * self._size, y * self._size)
                     self._data = (self.image, self.rect)
-                    if tile >= 0 and tile <= 6 or tile == 21: # ground tiles ..
+                    if tile >= 0 and tile <= 6 and tile != 4 or tile == 21 or tile == 26: # ground tiles ..
                         self._items.append(self._data)
+                    elif tile == 4:
+                        self._coffin.append(self._data)
                     elif tile >= 7 and tile <= 12: # stairs
-                        self._stairs = stairs.Stairs([self._size * x, self._size * y])
+                        self._items.append(self._data)
                     elif tile >= 13 and tile <= 16: # water
-                        self._water = water.Water([self._size * x, self._size *y], pygame.image.load("images/tiles/tile13.png"))
-                        self._coffin_water = water.Water([self._size * x, self._size *y], pygame.image.load("images/tiles/tile14.png"))
-                        self._mid_water = water.Water([self._size * x, self._size *y], pygame.image.load("images/tiles/tile15.png"))
-                        self._water_floor = water.Water([self._size * x, self._size *y], pygame.image.load("images/tiles/tile16.png"))
+                        self._water.append(self._data)
                     elif tile == 17 or tile == 18:
                         self._items.append(self._data)
-                    elif tile == 19 or tile == 20:
-                        pass #cave
+                    elif tile == 19 or tile == 20: # cave
+                        self._upper_cave = cave.Cave([self._size * x, self._size * y], pygame.image.load("images/tiles/tile19.png"))
+                        self._lower_cave = cave.Cave([self._size * x, self._size * y], pygame.image.load("images/tiles/tile20.png"))
+                        self._items.append(self._data)
                     elif tile == 22:
                         pass # end of level
                     elif tile == 23:
-                        self._player1 = player.Player([49.5 * x, 45.8 * y], 100) # player movements
+                        self._player1 = player.Player([49.5 * x, 46.8 * y], 100) # player movements
                         self._player1.update_health(self._player1._max_health)
-                        self._player1.move(self._items)
-                    elif tile == 24:
-                        self._enemy1 = enemy.Enemy([self._size * x, self._size * y], 100)
-                        
+                        self._player1.move(self._items, self._water, self._respawnpt, self._coffin)
+                    elif tile == 24: # enemy
+                        self._enemy1 = enemy.Enemy([49.5 * x, 46.8 * y], 100)
+                        self._enemy_group.add(self._enemy1)
+                    elif tile == 25: # spawn point
+                        self._respawnpt.append(self._data)

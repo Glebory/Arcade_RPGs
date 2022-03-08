@@ -23,3 +23,10 @@ class Character(GameObjects):
             self.rect.x = 0
         elif self.rect.x >= 1100:
             self.rect.x = 1100
+        if self.rect.y <= 0:
+            self.rect.y = 0
+        elif self.rect.y >= 650:
+            self.rect.y = 500
+
+    def character_animation(self):
+        pass
