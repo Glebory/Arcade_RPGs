@@ -1,7 +1,8 @@
 import pygame
 import Weapon
+import all_bullets
 
-def g_shot(x,y):
+def g_shot(spawn, handler):
     imagesF = [(pygame.image.load('images/weapons/G_shot/G_shot_F.png').convert_alpha()),
                (pygame.image.load('images/weapons/G_shot/G_shot_FL.png').convert_alpha()),
                (pygame.image.load('images/weapons/G_shot/G_shot_F.png').convert_alpha()),
@@ -9,5 +10,7 @@ def g_shot(x,y):
     imagesR = [pygame.image.load('images/weapons/G_shot/G_shot_R.png').convert_alpha()]
     imagesL = [pygame.image.load('images/weapons/G_shot/G_shot_L.png').convert_alpha()]
     imagesB = [pygame.image.load('images/weapons/G_shot/G_shot_F.png').convert_alpha()]
-    weapon = Weapon.Weapon(x, y, [imagesF, imagesR, imagesL, imagesB])
+    name = "G-Shot"
+    sound = "sounds/shotgun_shot.wav"
+    weapon = Weapon.Weapon(name, spawn, [imagesF, imagesR, imagesL, imagesB], handler, sound)
     return weapon

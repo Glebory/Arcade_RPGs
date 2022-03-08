@@ -1,29 +1,40 @@
 from all_tiles import *
+import random
+from PIL import Image
 
 
-class TileMap():
-    def __init__(self,size,screen):
+class TileMap:
+    def __init__(self, size):
         self.size = size
-        #self.random_map()
-        self.screen = screen
+        self.map = self.random_map()
+        self.room_imgs = beach_images()
 
 
+    def random_tile(self, x, y, matrix, row):
+        return
 
-    def random_map(self):
-        i = 32
-        while i < (self.size[0]-64):
-            j = 32
-            while j < (self.size[1]-64):
-                tile = create_random_tile(i,j)
-                tile.render(self.screen)
+    def render(self, screen):
+        screen.blit(self.image, (0, 0))
+        return
 
-    def border_tile(self):
-        i = 0
-        while i < self.size[0]-32:
-            tile = beach_tile(i, self.size[1])
-            tile.render(self.screen)
-            i += 32
-            print("success?")
+    def return_map(self):
+        for line in self.map:
+            print(str(line) + "\n")
+        return self.map
 
-    #def render(self, screen):
+    # def render(self, screen):
 
+
+def main():
+    import pygame
+    pygame.init()
+    info = pygame.display.Info()
+    size = w, h = info.current_w, info.current_h
+    screen = pygame.display.set_mode(size)
+    tilemap = TileMap(size)
+    tilemap.return_map()
+    tilemap.render(screen)
+
+
+if __name__ == '__main__':
+    main()

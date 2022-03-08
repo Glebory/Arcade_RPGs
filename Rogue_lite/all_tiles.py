@@ -10,6 +10,9 @@ def beach_tile( x, h):
                     pygame.image.load('images/sea-tile4.png').convert_alpha()]
     return ActiveTile(x, DEFAUALT_Y, DEFAULT_IMGS)
 
-def create_random_tile(x,y):
-    print ("success at "+ str(x)+" "+str(y))
-    return
+def beach_images():
+    beach_imgs = ['images/sea-tile.png',
+                    'images/sea-tile2.png',
+                    'images/sea-tile3.png',
+                    'images/sea-tile4.png']
+    return beach_imgs
