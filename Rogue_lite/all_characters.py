@@ -3,7 +3,7 @@ from Player import *
 from all_weapons import *
 
 
-def gimbo(x, y, objects):
+def gimbo(spawn, handler):
     imagesF = [pygame.image.load('images/characters/Gimbo/Gimbo.png').convert_alpha(),
                pygame.image.load('images/characters/Gimbo/Gimbo_FL.png').convert_alpha(),
                pygame.image.load('images/characters/Gimbo/Gimbo.png').convert_alpha(),
@@ -13,7 +13,10 @@ def gimbo(x, y, objects):
     imagesR = [pygame.image.load('images/characters/Gimbo/Gimbo_R.png').convert_alpha()]
     imagesB = [pygame.image.load('images/characters/Gimbo/Gimbo_B.png').convert_alpha()]
 
-    speed = 0.6
-    weapon = g_shot(x, y)
-    objects.append(weapon)
-    return Player(x, y, weapon, [imagesF, imagesL, imagesR, imagesB], speed)
+    speed = 2
+    weapon = g_shot(spawn, handler)
+    handler.objects.add(weapon)
+    name = "Gimbo"
+    player = Player(name, spawn, weapon, [imagesF, imagesL, imagesR, imagesB], speed, handler)
+    weapon.owner = player
+    return player

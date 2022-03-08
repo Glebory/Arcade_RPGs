@@ -85,3 +85,96 @@ class Weapon(GameObject):
         #if self.owner.state == "moving":
 
 
+
+    def get_owner(self):
+        return self._owner
+
+    def set_owner(self, owner):
+        self._owner = owner
+
+    owner = property(get_owner, set_owner)
+
+    def shoot(self):
+        print("weapon shoot is called")
+        if self.cooldown == 0:
+            if self.type[0] == 'gun':
+                if self.type[1] == 'reg':
+                    bullet = all_bullets.reg_bullet(self.direction,(self._x,self._y), self.handler)
+                    self.sound.play()
+                    self.handler._objects.add(bullet)
+                    self.cooldown = 20
+        else:
+            self.cooldown -= 1
+
+        return
+
+    def update(self, h, w):
+        self.x_coord += self._x_change
+        self.y_coord += self._y_change
+        if self.state == "shooting":
+            self.shoot()
+        #if self.owner.state == "moving":
+
+
+
+    def get_owner(self):
+        return self._owner
+
+    def set_owner(self, owner):
+        self._owner = owner
+
+    owner = property(get_owner, set_owner)
+
+    def shoot(self):
+        print("weapon shoot is called")
+        if self.cooldown == 0:
+            if self.type[0] == 'gun':
+                if self.type[1] == 'reg':
+                    bullet = all_bullets.reg_bullet(self.direction,(self._x,self._y), self.handler)
+                    self.sound.play()
+                    self.handler._objects.add(bullet)
+                    self.cooldown = 20
+        else:
+            self.cooldown -= 1
+
+        return
+
+    def update(self, h, w):
+        self.x_coord += self._x_change
+        self.y_coord += self._y_change
+        if self.state == "shooting":
+            self.shoot()
+        #if self.owner.state == "moving":
+
+
+
+    def get_owner(self):
+        return self._owner
+
+    def set_owner(self, owner):
+        self._owner = owner
+
+    owner = property(get_owner, set_owner)
+
+    def shoot(self):
+        print("weapon shoot is called")
+        if self.cooldown == 0:
+            if self.type[0] == 'gun':
+                if self.type[1] == 'reg':
+                    bullet = all_bullets.reg_bullet(self.direction,(self._x,self._y), self.handler)
+                    self.sound.play()
+                    self.handler._objects.add(bullet)
+                    self.cooldown = 20
+        else:
+            self.cooldown -= 1
+
+        return
+
+    def update(self, h, w):
+        self.x_coord += self._x_change
+        self.y_coord += self._y_change
+        if self.state == "shooting":
+            self.shoot()
+        #if self.owner.state == "moving":
+
+
