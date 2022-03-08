@@ -11,7 +11,6 @@ class Player(Character):
         super().__init__(position, health)
         self._images = []
         self._images2 = []
-        self._size = 48
         for x in range(1, 10):
             self.image = pygame.image.load(f'images/GirlWalkCycle/girl{x}.png')
             self.image = pygame.transform.scale(self.image, (self._size * 1, self._size * 1.5))
@@ -35,7 +34,7 @@ class Player(Character):
         self._direction = 1
         self._mass = 1
         self._velocity = 8
-        self._speed = 4
+        self._speed =  5# 2
         self._weapon = pygame.sprite.Group()
         self._remaining_health = pygame.sprite.Group()
         self._shot_direction = ""
@@ -54,7 +53,7 @@ class Player(Character):
 
     def update_right(self):
         if self._moving_right == True:
-            self._current += 0.78
+            self._current += 0.4
             if self._current >= 9:
                 self._current = 1
             self.image = self._images[int(self._current)]
@@ -64,7 +63,7 @@ class Player(Character):
 
     def update_left(self):
         if self._moving_left == True:
-            self._current += 0.78
+            self._current += 0.4
             if self._current >= 9:
                 self._current = 1
             self.image = self._images2[int(self._current)]
@@ -93,22 +92,48 @@ class Player(Character):
         self._max_health -= 1
         self.update_health(self._max_health)
 
-    def move(self, items):
+    def move(self, items, waters, respawn, coffins):
+        self._screen_scroll = 0
         self._xSpeed = 0
         self._ySpeed = 0
         self.boundaries()
         self.jump()
+        print(self.rect, "BEFORE")
         if self._right and not self._left:
             self._xSpeed = self._speed
         if self._left and not self._right:
             self._xSpeed -= self._speed
-        for item in items:
+        for item in items: # item surfaces
+            if item[1].colliderect(self.rect.x + self._xSpeed, self.rect.y, self._w, self._h):
+                self._xSpeed = 0
+            if item[1].colliderect(self.rect.x, self.rect.y + self._ySpeed, self._w, self._h):
+                if self._mass > 0:
+                    self._mass = 0
+                    self._ySpeed = item[1].top - self.rect.bottom
+                elif self._mass < 0:
+                    self._mass = 0
+                    self._ySpeed = item[1].bottom - self.rect.top
+        for item in coffins: # item surfaces
             if item[1].colliderect(self.rect.x + self._xSpeed, self.rect.y, self._w, self._h):
                 self._xSpeed = 0
             if item[1].colliderect(self.rect.x, self.rect.y + self._ySpeed, self._w, self._h):
                 self._ySpeed = 0
+
+        for water in waters:
+            if water[1].colliderect(self.rect.x + self._xSpeed, self.rect.y, self._w, self._h):
+                for respawnpt in respawn:
+                    if respawnpt[1].x >= self.rect.x:
+                        print(self.rect, "AFTER")
+                        self.rect.x -= 50
+                        self._screen_scroll += 300
+
         self.rect.x += self._xSpeed
         self.rect.y += self._ySpeed
+        if self.rect.right > 1160 - self._scroll or self.rect.left < self._scroll:
+            self.rect.x -= self._xSpeed
+            self._screen_scroll -= self._xSpeed
+
+        return self._screen_scroll
 
     def jump(self):
         if self._jump and self._in_air == False:
