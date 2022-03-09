@@ -23,29 +23,36 @@ class Enemy(Character):
         self.rect.center = (self.position[0], self.position[1])
         self._direction = 1
         self._speed = 2
-        self._data = (self.image, self.rect)
+        self._initial = self.rect.x
+        self._w = self.image.get_width()
+        self._h = self.image.get_height()
+        self._xSpeed = 0
+
+        #self._data = (self.image, self.rect)
 
 
     def __str__(self):
         return "%s" % (self._position)
 
-    def draw(self, window):
+    def draw(self, window, screen_scroll):
         window.blit(self.image, self.rect)
+        self.rect.x += screen_scroll
 
-    def move(self, screen_scroll): #84
+    def move(self):
+        self._xSpeed = 0
+        self._ySpeed = 0
         if self._direction == 1:
-            if self.rect.x + self._speed <= self._position[0] + 60:
-                self.rect.x += self._speed
+            if self.rect.x + self._speed <= self._initial + 60:
+                self._xSpeed += self._speed
                 self._current += 0.25
                 if self._current >= 8:
                     self._current = 1
                 self.image = self._images[int(self._current)]
-                self.rect.x += screen_scroll
             else:
                 self._direction = -1
         if self._direction == -1:
-            if self.rect.x - self._speed >= self._position[0] - 60:
-                self.rect.x -= self._speed
+            if self.rect.x - self._speed >= self._initial - 60:
+                self._xSpeed -= self._speed
                 self._current += 0.25
                 if self._current >= 8:
                     self._current = 1
@@ -53,4 +60,6 @@ class Enemy(Character):
             else:
                 self._direction = 1
 
-        self.rect.x += screen_scroll
+        
+
+    #    self.rect.x += screen_scroll

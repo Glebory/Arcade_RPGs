@@ -6,6 +6,7 @@ class Character(GameObjects):
         super().__init__(position)
         self._health = health
         self._segment = 75
+        
 
     def __str__(self):
         return "%s" % self._position
@@ -28,5 +29,13 @@ class Character(GameObjects):
         elif self.rect.y >= 650:
             self.rect.y = 500
 
-    def character_animation(self):
-        pass
+    def jump(self):
+        if self._jump and self._in_air == False:
+            self._mass = -11
+            self._jump = False
+            self._in_air = True
+        self._mass += self._gravity
+        if self._mass > 10:
+            self._mass
+            self._in_air = False
+        self._ySpeed += self._mass

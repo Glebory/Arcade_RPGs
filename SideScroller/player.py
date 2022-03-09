@@ -30,23 +30,27 @@ class Player(Character):
         self._h = self.image.get_height()
         self._left = False
         self._right = False
-        self._jump = False
         self._direction = 1
-        self._mass = 1
-        self._velocity = 8
-        self._speed =  5# 2
+        self._score = 0
+        self._speed = 5# 2
         self._weapon = pygame.sprite.Group()
         self._remaining_health = pygame.sprite.Group()
         self._shot_direction = ""
         self._counter = 0
         self._max_health = 4
-        self._xSpeed = 0
-        self._ySpeed = 0
+        self._mass = 1
+        self._velocity = 8
+        self._jump = False
         self._gravity = 0.75
         self._in_air = False
+        self._xSpeed = 0
+        self._ySpeed = 0
 
     def __str__(self):
         return "%s" % self._position
+
+    def get_score(self):
+        return self._score
 
     def check_moving_right(self):
         self._moving_right = True
@@ -98,7 +102,6 @@ class Player(Character):
         self._ySpeed = 0
         self.boundaries()
         self.jump()
-        print(self.rect, "BEFORE")
         if self._right and not self._left:
             self._xSpeed = self._speed
         if self._left and not self._right:
@@ -109,6 +112,7 @@ class Player(Character):
             if item[1].colliderect(self.rect.x, self.rect.y + self._ySpeed, self._w, self._h):
                 if self._mass > 0:
                     self._mass = 0
+                    self._in_air = False
                     self._ySpeed = item[1].top - self.rect.bottom
                 elif self._mass < 0:
                     self._mass = 0
@@ -123,7 +127,6 @@ class Player(Character):
             if water[1].colliderect(self.rect.x + self._xSpeed, self.rect.y, self._w, self._h):
                 for respawnpt in respawn:
                     if respawnpt[1].x >= self.rect.x:
-                        print(self.rect, "AFTER")
                         self.rect.x -= 50
                         self._screen_scroll += 300
 
@@ -132,19 +135,8 @@ class Player(Character):
         if self.rect.right > 1160 - self._scroll or self.rect.left < self._scroll:
             self.rect.x -= self._xSpeed
             self._screen_scroll -= self._xSpeed
-
         return self._screen_scroll
 
-    def jump(self):
-        if self._jump and self._in_air == False:
-            self._mass = -11
-            self._jump = False
-            self._in_air = True
-        self._mass += self._gravity
-        if self._mass > 10:
-            self._mass
-            self._in_air = False
-        self._ySpeed += self._mass
 
     def add_inventory(self, item):
         if item not in self._inventory:
