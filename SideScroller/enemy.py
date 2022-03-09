@@ -21,15 +21,16 @@ class Enemy(Character):
         self.image = self._images[self._current]
         self.rect = self.image.get_rect()
         self.rect.center = (self.position[0], self.position[1])
-        self._direction = 1
+        self._direction = -1
         self._speed = 2
         self._initial = self.rect.x
         self._w = self.image.get_width()
         self._h = self.image.get_height()
         self._xSpeed = 0
-
-        #self._data = (self.image, self.rect)
-
+        self._left = False
+        self._right = True
+        self._weapon = pygame.sprite.Group()
+        self._max = 8
 
     def __str__(self):
         return "%s" % (self._position)
@@ -40,24 +41,24 @@ class Enemy(Character):
 
     def move(self):
         self._xSpeed = 0
-        self._ySpeed = 0
         if self._direction == 1:
             if self.rect.x + self._speed <= self._initial + 60:
                 self._xSpeed += self._speed
                 self._current += 0.25
-                if self._current >= 8:
+                if self._current >= self._max:
                     self._current = 1
                 self.image = self._images[int(self._current)]
             else:
                 self._direction = -1
+
         if self._direction == -1:
             if self.rect.x - self._speed >= self._initial - 60:
                 self._xSpeed -= self._speed
                 self._current += 0.25
-                if self._current >= 8:
+                if self._current >= self._max:
                     self._current = 1
                 self.image = self._images2[int(self._current)]
             else:
                 self._direction = 1
 
-    #    self.rect.x += screen_scroll
+    #    self.rect.x += self._xSpeed#
