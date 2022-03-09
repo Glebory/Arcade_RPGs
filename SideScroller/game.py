@@ -5,6 +5,8 @@ import weapon
 import health
 import tilemap
 
+
+
 class Game:
     def __init__(self):
         pygame.init()
@@ -22,6 +24,7 @@ class Game:
         while game_loop:
             if self._tilemap._player1._counter > 0:
                 self._tilemap._player1._counter -= 1
+
             self.window.fill((192, 68, 143))
             self.window.blit(self._background, [0,0])
             self._tilemap.draw()
@@ -42,7 +45,6 @@ class Game:
                 self.window.blit(self._tilemap._player1.image, self._tilemap._player1.rect)
                 self._tilemap._player1._screen_scroll = self._tilemap._player1.move(self._tilemap._items, self._tilemap._water, self._tilemap._respawnpt, self._tilemap._coffin)
                 self._tilemap._player1._remaining_health.draw(self.window)
-
                 self._tilemap._player1.update_left()
                 self._tilemap._player1.update_right()
 
@@ -52,6 +54,12 @@ class Game:
                     enemy.move()
                     enemy.check_player_collision(self._tilemap._player1)
 
+            for bat in self._tilemap._bat_group:
+                if bat.health > 0:
+                    bat.draw(self.window, self._tilemap._player1._screen_scroll)
+                    bat.move()
+                    bat.check_player_collision(self._tilemap._player1)
+
             for coin in self._tilemap._coin_group:
                 coin.draw(self.window, self._tilemap._player1._screen_scroll)
                 coin.update()
@@ -59,7 +67,7 @@ class Game:
 
             if self._state == True:
                 self._tilemap._player1.attack()
-            self._tilemap._player1._weapon.update(self._tilemap._enemy_group)
+            self._tilemap._player1._weapon.update(self._tilemap._enemy_group, self._tilemap._bat_group, self._tilemap._butterfly_group)
             self._tilemap._player1._weapon.draw(self.window)
 
             for event in pygame.event.get():

@@ -46,6 +46,7 @@ class Player(Character):
         self._xSpeed = 0
         self._ySpeed = 0
 
+
     def __str__(self):
         return "%s" % self._position
 
@@ -127,8 +128,10 @@ class Player(Character):
             if water[1].colliderect(self.rect.x + self._xSpeed, self.rect.y, self._w, self._h):
                 for respawnpt in respawn:
                     if respawnpt[1].x >= self.rect.x:
-                        self.rect.x -= 50
-                        self._screen_scroll += 300
+                        self.del_health()
+                        self.update_health(3)
+                        self.rect.x -= 5
+                        self._screen_scroll += 130
 
         self.rect.x += self._xSpeed
         self.rect.y += self._ySpeed

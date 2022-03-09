@@ -29,7 +29,7 @@ class GameObjects(pygame.sprite.Sprite):
 
     def check_player_collision(self, player):
         if self.rect.colliderect(player):
-            #player._health -= 1
+            player._health -= 1
             if player._health == self._segment:
                 self._segment -= 25
                 player.del_health()
