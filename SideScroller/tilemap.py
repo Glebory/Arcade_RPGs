@@ -62,9 +62,7 @@ class TileMap:
                     elif tile == 17 or tile == 18:
                         self._items.append(self._data)
                     elif tile == 19 or tile == 20: # cave
-                        self._upper_cave = cave.Cave([self._size * x, self._size * y], pygame.image.load("images/tiles/tile19.png"))
-                        self._lower_cave = cave.Cave([self._size * x, self._size * y], pygame.image.load("images/tiles/tile20.png"))
-                        self._items.append(self._data)
+                        pass
                     elif tile == 22:
                         pass # end of level
                     elif tile == 23:

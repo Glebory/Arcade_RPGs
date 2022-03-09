@@ -60,6 +60,4 @@ class Enemy(Character):
             else:
                 self._direction = 1
 
-        
-
     #    self.rect.x += screen_scroll

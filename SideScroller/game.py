@@ -25,7 +25,6 @@ class Game:
             self.window.fill((192, 68, 143))
             self.window.blit(self._background, [0,0])
             self._tilemap.draw()
-
             for water in self._tilemap._water:
                 water[1][0] += self._tilemap._player1._screen_scroll
                 self.window.blit(water[0], water[1])
@@ -50,14 +49,8 @@ class Game:
             for enemy in self._tilemap._enemy_group:
                 if enemy.health > 0:
                     enemy.draw(self.window, self._tilemap._player1._screen_scroll)
-                    for item in self._tilemap._items: # item surfaces
-                        if item[1].colliderect(enemy.rect.x + enemy._xSpeed, enemy.rect.y, enemy._w, enemy._h):
-                            enemy._xSpeed = 0
-                        
                     enemy.move()
                     enemy.check_player_collision(self._tilemap._player1)
-
-
 
             for coin in self._tilemap._coin_group:
                 coin.draw(self.window, self._tilemap._player1._screen_scroll)
