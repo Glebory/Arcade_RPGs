@@ -5,12 +5,11 @@ import weapon
 import health
 import tilemap
 
-
 class Game:
     def __init__(self):
         pygame.init()
         self.window = pygame.display.set_mode((1160, 650))
-        self._background = pygame.image.load("images/background3.png")
+        self._background = pygame.image.load("images/background4.jfif")
         self._clock = pygame.time.Clock()
         self._state = False
         self._cooldown = 10000
@@ -26,7 +25,6 @@ class Game:
             self.window.fill((192, 68, 143))
             self.window.blit(self._background, [0,0])
             self._tilemap.draw()
-
             for water in self._tilemap._water:
                 water[1][0] += self._tilemap._player1._screen_scroll
                 self.window.blit(water[0], water[1])
@@ -44,14 +42,20 @@ class Game:
                 self.window.blit(self._tilemap._player1.image, self._tilemap._player1.rect)
                 self._tilemap._player1._screen_scroll = self._tilemap._player1.move(self._tilemap._items, self._tilemap._water, self._tilemap._respawnpt, self._tilemap._coffin)
                 self._tilemap._player1._remaining_health.draw(self.window)
+
                 self._tilemap._player1.update_left()
                 self._tilemap._player1.update_right()
 
             for enemy in self._tilemap._enemy_group:
                 if enemy.health > 0:
-                    enemy.draw(self.window)
-                    enemy.move(self._tilemap._player1._screen_scroll)
+                    enemy.draw(self.window, self._tilemap._player1._screen_scroll)
+                    enemy.move()
                     enemy.check_player_collision(self._tilemap._player1)
+
+            for coin in self._tilemap._coin_group:
+                coin.draw(self.window, self._tilemap._player1._screen_scroll)
+                coin.update()
+                coin.add_coin(self._tilemap._player1)
 
             if self._state == True:
                 self._tilemap._player1.attack()

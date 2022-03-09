@@ -3,9 +3,8 @@ import os
 import pygame
 import player
 import enemy
-import stairs
 import cave
-
+import coin
 
 class TileMap:
     def __init__(self):
@@ -14,7 +13,7 @@ class TileMap:
         self._cols = 150
     #    self._size = 1160 // self._rows
         self._size = 48
-        self._types = 27  # NUMBER OF DIFFERENT TILES USED
+        self._types = 28  # NUMBER OF DIFFERENT TILES USED
         self.images = []
         self._map = []
         self._items = []
@@ -23,6 +22,7 @@ class TileMap:
         self._respawnpt = []
         self._cave_group = pygame.sprite.Group()
         self._enemy_group = pygame.sprite.Group()
+        self._coin_group = pygame.sprite.Group()
         self.update()
         self.draw()
 
@@ -46,6 +46,7 @@ class TileMap:
         for y, row in enumerate(data):
             for x, tile in enumerate(row):
                 if tile != -1:
+
                     self.image = self.images[tile]
                     self.rect = self.image.get_rect()
                     self.rect.center = (x * self._size, y * self._size)
@@ -55,15 +56,13 @@ class TileMap:
                     elif tile == 4:
                         self._coffin.append(self._data)
                     elif tile >= 7 and tile <= 12: # stairs
-                        self._items.append(self._data)
+                        pass
                     elif tile >= 13 and tile <= 16: # water
                         self._water.append(self._data)
                     elif tile == 17 or tile == 18:
                         self._items.append(self._data)
                     elif tile == 19 or tile == 20: # cave
-                        self._upper_cave = cave.Cave([self._size * x, self._size * y], pygame.image.load("images/tiles/tile19.png"))
-                        self._lower_cave = cave.Cave([self._size * x, self._size * y], pygame.image.load("images/tiles/tile20.png"))
-                        self._items.append(self._data)
+                        pass
                     elif tile == 22:
                         pass # end of level
                     elif tile == 23:
@@ -71,7 +70,13 @@ class TileMap:
                         self._player1.update_health(self._player1._max_health)
                         self._player1.move(self._items, self._water, self._respawnpt, self._coffin)
                     elif tile == 24: # enemy
-                        self._enemy1 = enemy.Enemy([49.5 * x, 46.8 * y], 100)
+                        self._enemy1 = enemy.Enemy([49.5 * x, 45.8 * y], 100)
                         self._enemy_group.add(self._enemy1)
+                    #    for enemys in self._enemy_group:
+                    #        enemys.move(self._items)
+
                     elif tile == 25: # spawn point
                         self._respawnpt.append(self._data)
+                    elif tile == 27:
+                        self._coin = coin.Coin([self._size * x, self._size * y])
+                        self._coin_group.add(self._coin)
