@@ -67,8 +67,8 @@ class Handler():
                 object._y = 0
             elif object._x < 0:
                 object._x = 0
-            if object._x > self._size[0] - 16:
-                object._x = self._size[0] - 16
-            elif object._y > self._size[1] - 32:
-                object._y= self._size[1] - 32
+            if object._x > 640 - 16:
+                object._x = 640 - 16
+            elif object._y > 480 - 32:
+                object._y= 480 - 32
 

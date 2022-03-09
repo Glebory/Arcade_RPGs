@@ -34,13 +34,17 @@ def key_up(event, player):
     if event.key == pygame.K_w or event.key == pygame.K_s:
         player.y_change = 0
         player.weapon.y_change = 0
+        player._shadow.stop_y()
 
     if event.key == pygame.K_a or event.key == pygame.K_d:
         player.x_change = 0
         player.weapon.x_change = 0
+        player._shadow.stop_x()
 
     if player.x_change == 0 and player.y_change == 0:
         player.stop()
+        player._shadow.stop_x()
+        player._shadow.stop_y()
 
     if event.key == pygame.K_UP and event.key == pygame.K_DOWN and event.key == pygame.K_LEFT and event.key == pygame.K_RIGHT:
         player.weapon.state = "standby"
