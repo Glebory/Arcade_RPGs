@@ -2,20 +2,26 @@ import pygame
 
 
 class GameObject(pygame.sprite.Sprite):
-    def __init__(self, x, y, images=None):
+    def __init__(self, name=None, spawn=(0, 0), images=None):
         pygame.sprite.Sprite.__init__(self)
         if images is None:
             images = [pygame.image.load('images/Error.png').convert_alpha()]
-        self._x = x
-        self._y = y
+        if name is None:
+            name = 'error'
+        self._name = name
+        self._spawn = spawn
+        self._x = self._spawn[0]
+        self._y = self._spawn[1]
         self._images = images
         self._index = 0
         self._image = self._images[self._index]
+        self._rect = self.image.get_rect()
         self._speed = 0
         self._x_change = 0
         self._y_change = 0
         self._state = "stopped"
         self._frames = 20
+
 
     def get_x(self):
         return self._x
@@ -107,7 +113,16 @@ class GameObject(pygame.sprite.Sprite):
 
     frames = property(get_frames, set_frames)
 
-    def tick(self, h, w):
+    def get_rect(self):
+        return self._rect
+
+    def set_rect(self, rect):
+        self._rect = rect
+        return
+
+    rect = property(get_rect, set_rect)
+
+    def update(self, h, w):
         self.x_coord += self._x_change
         self.y_coord += self._y_change
         if self.state == "moving":
@@ -117,16 +132,6 @@ class GameObject(pygame.sprite.Sprite):
                 self.index = 0
 
             self.image = self.images[self.index // self.frames]
-
-        if self._x < 0:
-            self._x = 0
-        elif self._y < 0:
-            self._y = 0
-
-        if self._x > w - 16:
-            self._x = w - 16
-        elif self._y > h - 32:
-            self._y = h - 32
 
     def render(self, screen):
         screen.blit(self._image, (self._x, self._y))

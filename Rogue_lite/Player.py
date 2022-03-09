@@ -1,77 +1,94 @@
 from GameObject import *
 from Swing import *
-from bullet import *
+from Bullet import *
 import pygame
+from Shadow import *
 
 class Player(GameObject):
-    def __init__(self, x, y, weapon):
-        super().__init__(x, y)
-        self._imagesF = [pygame.image.load('images/characters/Gimbo/Gimbo.png').convert_alpha()]
-        self._imagesF.append(pygame.image.load('images/characters/Gimbo/Gimbo_FL.png').convert_alpha())
-        self._imagesF.append(pygame.image.load('images/characters/Gimbo/Gimbo.png').convert_alpha())
-        self._imagesF.append(pygame.image.load('images/characters/Gimbo/Gimbo_FR.png').convert_alpha())
-
-        self._imagesL = [pygame.image.load('images/characters/Gimbo/Gimbo_L.png').convert_alpha()]
-        self._imagesR = [pygame.image.load('images/characters/Gimbo/Gimbo_R.png').convert_alpha()]
-        self._imagesB = [pygame.image.load('images/characters/Gimbo/Gimbo_B.png').convert_alpha()]
+    def __init__(self, name, spawn, weapon, img_matrix, speed, handler):
+        super().__init__(name, spawn)
+        self._imagesF = img_matrix[0]
+        self._imagesL = img_matrix[1]
+        self._imagesR = img_matrix[2]
+        self._imagesB = img_matrix[3]
         self.images = self._imagesF
         self.image = self._images[self._index]
         self._weapon = weapon
-        self.speed = 0.6
-        self.last_images = self._imagesF
+        self.speed = speed
+        self.handler = handler
+        self._shadow = Shadow(self)
+        handler._objects.add(self._shadow)
+
+
 
     def mv_up(self):
         self.y_change = -self.speed
         self.weapon.y_change = -self.speed
-        self.weapon.last_images = self.weapon.images
-        self.weapon.images = self.weapon.imagesF
-        self.weapon.x_coord = self.x_coord
-        self.last_images = self.images
-        self.images = self._imagesB
+        self._shadow.y_change = -self.speed
+        self.turn_up()
+
 
     def mv_down(self):
         self.y_change = self.speed
         self.weapon.y_change = self.speed
-        self.weapon.last_images = self.weapon.images
-        self.weapon.images = self.weapon.imagesF
-        self.weapon.x_coord = self.x_coord
-        self.last_images = self.images
-        self.images = self._imagesF
+        self._shadow.y_change = self.speed
+        self.turn_down()
+
 
     def mv_left(self):
         self.x_change = -self.speed
         self.weapon.x_change = -self.speed
-        self.weapon.last_images = self.weapon.images
-        self.weapon.images = self.weapon.imagesL
-        self.weapon.x_coord = self.x_coord -16
-        self.last_images = self.images
-        self.images = self._imagesL
+        self._shadow.x_change = -self.speed
+        self.turn_left()
+
 
     def mv_right(self):
         self.x_change = self.speed
         self.weapon.x_change = self.speed
-        self.weapon.last_images = self.weapon.images
+        self._shadow.x_change = self.speed
+        self.turn_right()
+
+
+    def turn_up(self):
+        self.weapon.images = self.weapon.imagesF
+        self.weapon.x_coord = self.x_coord
+        self.images = self._imagesB
+
+    def turn_down(self):
+        self.weapon.images = self.weapon.imagesF
+        self.weapon.x_coord = self.x_coord
+        self.images = self._imagesF
+
+    def turn_left(self):
+        self.weapon.images = self.weapon.imagesL
+        self.weapon.x_coord = self.x_coord -16
+        self.images = self._imagesL
+
+    def turn_right(self):
         self.weapon.images = self.weapon.imagesR
         self.weapon.x_coord = self.x_coord
-        self.last_images = self.images
         self.images = self._imagesR
 
     def attack_up(self):
-        self.last_images = self.images
-        self.images = self._imagesB
+        self.turn_up()
+        self.weapon.direction = (0,-1)
+        self.weapon.state = "shooting"
 
     def attack_down(self):
-
-        self.last_images = self.images
-        self.images = self._imagesF
+        self.turn_down()
+        self.weapon.direction = (0,1)
+        self.weapon.state = "shooting"
 
     def attack_left(self):
-        self.last_images = self.images
-        self.images = self._imagesL
+        self.turn_left()
+        self.weapon.direction = (-1,0)
+        self.weapon.state = "shooting"
 
     def attack_right(self):
-        self.last_images = self.images
-        self.images = self._imagesR
+        self.turn_right()
+        self.weapon.direction = (1,0)
+        self.weapon.state = "shooting"
+        print("player attack OK")
 
     def get_weapon(self):
         return self._weapon
@@ -84,8 +101,6 @@ class Player(GameObject):
 
 
     def stop(self):
-        self.images = self.last_images
-        self.weapon.images = self.weapon.last_images
         self.image = self.images[0]
         self.state = "stopped"
         self.weapon.state = "stopped"
