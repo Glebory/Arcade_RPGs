@@ -1,16 +1,16 @@
 import pygame
 
 
-class Tile():
+class Tile(pygame.sprite.Sprite):
     def __init__(self, x, y, image=None):
+        super().__init__()
         if image is None:
             image = [pygame.image.load('images/Error.png').convert_alpha()]
-        self._x = x
-        self._y = y
         self._image = image
+        self.rect = self._image.get_rect(topleft=(x,y))
 
-    def tick(self):
+    def update(self):
         return
 
-    def render(self,screen):
-        screen.blit(self._image, (self._x, self._y))
+    def render(self, screen):
+        screen.blit(self._image, (self.rect))

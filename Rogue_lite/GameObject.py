@@ -10,36 +10,16 @@ class GameObject(pygame.sprite.Sprite):
             name = 'error'
         self._name = name
         self._spawn = spawn
-        self._x = self._spawn[0]
-        self._y = self._spawn[1]
         self._images = images
         self._index = 0
         self._image = self._images[self._index]
-        self._rect = self.image.get_rect()
+        self._rect = self.image.get_rect(topleft=(spawn))
+        self._rect.width =self.image.get_width()
         self._speed = 0
         self._x_change = 0
         self._y_change = 0
         self._state = "stopped"
         self._frames = 20
-
-
-    def get_x(self):
-        return self._x
-
-    def set_x(self, val):
-        self._x = val
-        return
-
-    x_coord = property(get_x, set_x)
-
-    def get_y(self):
-        return self._y
-
-    def set_y(self, val):
-        self._y = val
-        return
-
-    y_coord = property(get_y, set_y)
 
     def get_image(self):
         return self._image
@@ -122,16 +102,9 @@ class GameObject(pygame.sprite.Sprite):
 
     rect = property(get_rect, set_rect)
 
-    def update(self, h, w):
-        self.x_coord += self._x_change
-        self.y_coord += self._y_change
-        if self.state == "moving":
-            self.index += 1
-
-            if self.index >= len(self.images) * self.frames:
-                self.index = 0
-
-            self.image = self.images[self.index // self.frames]
+    def update(self):
+        self.rect.x += self._x_change
+        self.rect.y += self._y_change
 
     def render(self, screen):
-        screen.blit(self._image, (self._x, self._y))
+        screen.blit(self._image, self._rect)

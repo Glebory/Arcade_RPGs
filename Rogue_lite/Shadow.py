@@ -3,16 +3,18 @@ from GameObject import *
 
 
 class Shadow(GameObject):
-    def __init__(self, owner):
+    def __init__(self, owner, buffer_x, buffer_y):
         super().__init__(owner)
-        self._x = owner._x
-        self._y = owner._y + owner.rect.height + 3
+        self.buffer_x = buffer_x
+        self.owner = owner
+        self.buffer_y = buffer_y
         self.image = pygame.image.load("images/shadow.png").convert_alpha()
         self.rect = self.image.get_rect()
-        self.rect.center = [self._x, self._y]
+        self.rect.x = owner.rect.x + buffer_x
+        self.rect.y = owner.rect.y + buffer_y
 
-    def stop_x(self):
-        self.x_change = 0
-    def stop_y(self):
-        self.y_change = 0
+
+    def update(self):
+        self.rect.x = self.owner.rect.x + self.buffer_x
+        self.rect.y = self.owner.rect.y + self.buffer_y
 

@@ -13,60 +13,58 @@ class Player(GameObject):
         self._imagesB = img_matrix[3]
         self.images = self._imagesF
         self.image = self._images[self._index]
+        self._rect = self.image.get_rect(topleft=(spawn))
         self._weapon = weapon
         self.speed = speed
         self.handler = handler
-        self._shadow = Shadow(self)
-        handler._objects.add(self._shadow)
+        self._shadow = Shadow(self,0, self.rect.height +3)
+        handler.unmovable_group.add(self._shadow)
+        self.health = 3
 
 
 
     def mv_up(self):
         self.y_change = -self.speed
         self.weapon.y_change = -self.speed
-        self._shadow.y_change = -self.speed
         self.turn_up()
 
 
     def mv_down(self):
         self.y_change = self.speed
         self.weapon.y_change = self.speed
-        self._shadow.y_change = self.speed
         self.turn_down()
 
 
     def mv_left(self):
         self.x_change = -self.speed
         self.weapon.x_change = -self.speed
-        self._shadow.x_change = -self.speed
         self.turn_left()
 
 
     def mv_right(self):
         self.x_change = self.speed
         self.weapon.x_change = self.speed
-        self._shadow.x_change = self.speed
         self.turn_right()
 
 
     def turn_up(self):
         self.weapon.images = self.weapon.imagesF
-        self.weapon.x_coord = self.x_coord
+        self.weapon.x_coord = self.rect.x
         self.images = self._imagesB
 
     def turn_down(self):
         self.weapon.images = self.weapon.imagesF
-        self.weapon.x_coord = self.x_coord
+        self.weapon.x_coord = self.rect.x
         self.images = self._imagesF
 
     def turn_left(self):
         self.weapon.images = self.weapon.imagesL
-        self.weapon.x_coord = self.x_coord -16
+        self.weapon.x_coord = self.rect.x -16
         self.images = self._imagesL
 
     def turn_right(self):
         self.weapon.images = self.weapon.imagesR
-        self.weapon.x_coord = self.x_coord
+        self.weapon.x_coord = self.rect.x
         self.images = self._imagesR
 
     def attack_up(self):
@@ -99,7 +97,11 @@ class Player(GameObject):
 
     weapon = property(get_weapon, set_weapon)
 
-
+    def update(self):
+        self.rect.x += self._x_change
+        self.rect.y += self._y_change
+        if self.health < 0:
+            print("dead")
     def stop(self):
         self.image = self.images[0]
         self.state = "stopped"
