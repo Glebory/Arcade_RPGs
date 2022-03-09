@@ -31,6 +31,7 @@ class Handler():
         self.unmovable_group = pygame.sprite.Group()
         self.enemy_group_shadow = pygame.sprite.Group()
         self.player_bullets = pygame.sprite.Group()
+        self.ui_group = pygame.sprite.Group()
         self.set_up_room()
         self._gui = Gui(self._screen, self._objects, 480, 640)
         pygame.event.set_allowed([pygame.QUIT, pygame.KEYDOWN, pygame.KEYUP])
@@ -72,24 +73,21 @@ class Handler():
 
     def collide_check(self):
         for object in self._objects:
-            if object.rect.y < 0:
-                object.rect.y = 0
-            elif object.rect.x < 0:
-                object.rect.x = 0
-            if object.rect.x > 640 - object.rect.width:
-                object.rect.x = 640 - object.rect.width
-            elif object.rect.y > 480 - object.rect.height:
-                object.rect.y= 480 - object.rect.height
+            if object.rect.y < 32:
+                object.rect.y = 32
+            elif object.rect.x < 32:
+                object.rect.x = 32
+            if object.rect.x > 612 - object.rect.width:
+                object.rect.x = 612 - object.rect.width
+            elif object.rect.y > 442 - object.rect.height:
+                object.rect.y= 442 - object.rect.height
             if isinstance(object, Player):
-                pygame.draw.rect(self._screen, "yellow", object._shadow.rect)
                 for enemy in self.enemy_group:
                     if pygame.sprite.collide_rect(enemy.shadow,object):
-                        pygame.draw.rect(self._screen, "Red", object._shadow.rect)
                         object.health -= enemy.damage
 
         for enemy in self.enemy_group:
             for bullet in self.player_bullets:
-                pygame.draw.rect(self._screen, "red", bullet.rect)
                 if pygame.sprite.collide_rect(enemy.shadow, bullet):
                     enemy.health -= bullet.damage
                     bullet.destroy()

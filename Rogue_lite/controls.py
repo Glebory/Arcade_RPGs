@@ -1,6 +1,5 @@
 import pygame
 def check_keypress(event, player):
-    print("controling")
     if event.key == pygame.K_w:
         player.mv_up()
         player.state = "moving"

@@ -19,7 +19,7 @@ class Enemy(GameObject):
         self.image = self.images[0]
         self.state = "chilling"
         self.frames = 50
-        self.speed = 1
+        self.speed = 2
         self.aggro_radius = 100
         self.health = health
         self.damage = 1
@@ -57,6 +57,7 @@ class Enemy(GameObject):
         if self.index > 90:
             self.index = 0
         if self.health < 0:
+            self.shadow.kill()
             self.kill()
 
 
