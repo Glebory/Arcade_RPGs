@@ -17,8 +17,9 @@ class Player(GameObject):
         self._weapon = weapon
         self.speed = speed
         self.handler = handler
-        self._shadow = Shadow(self,0,self.rect.height//2+2)
-        handler.unmovable_group.add(self._shadow)
+        self._shadow = Shadow(self,0,self._rect.height//2+2)
+        handler.all_shadows.add(self._shadow)
+        handler._objects.add(self._shadow)
         self.health = 3
 
 

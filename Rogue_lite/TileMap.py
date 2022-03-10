@@ -9,6 +9,7 @@ def set_up_room(room_imgs, matrix, handler):
             if matrix[i][j] != 0:
                 tile = Tile(j*32,i*32, room_imgs[matrix[i][j]])
                 handler.unmovable_group.add(tile)
+                handler._objects.add(tile)
             j+=1
         i+=1
 
