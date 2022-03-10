@@ -11,18 +11,21 @@ class Enemy(GameObject):
         self._imagesF.append(pygame.image.load('images/enemies/Bottle_FR.png').convert_alpha())
         self._imagesF.append(pygame.image.load('images/enemies/Bottle_F.png').convert_alpha())
         self._imagesF.append(pygame.image.load('images/enemies/Bottle_FL.png').convert_alpha())
-        self.shadow = Shadow(self,-3.5,9)
-        self.handler = handler
-        handler.enemy_group_shadow.add(self.shadow)
-        handler.unmovable_group.add(self.shadow)
         self.images = self._imagesF
         self.image = self.images[0]
+        self.rect = self._image.get_rect(topleft=(spawn))
+        self._shadow = Shadow(self,-3.5,9)
+        self.handler = handler
+        handler._objects.add(self._shadow)
+        handler.enemy_group_shadow.add(self.shadow)
+        handler.all_shadows.add(self.shadow)
         self.state = "chilling"
         self.frames = 50
-        self.speed = 1
+        self.speed = 2
         self.aggro_radius = 100
         self.health = health
         self.damage = 1
+
 
     def aggro(self, player):
         if (player.rect.x - self.rect.x) > 0:
@@ -57,6 +60,7 @@ class Enemy(GameObject):
         if self.index > 90:
             self.index = 0
         if self.health < 0:
+            self.shadow.kill()
             self.kill()
 
 

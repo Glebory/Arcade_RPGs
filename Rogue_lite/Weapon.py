@@ -5,9 +5,9 @@ import all_bullets
 from Bullet import  *
 
 class Weapon(GameObject):
-    def __init__(self, name, spawn, images_matrix, handler,sound, type=None):
+    def __init__(self, name, spawn, images_matrix, handler, sound, type=None):
         super().__init__(name, spawn)
-        self._owner = None
+        self.owner = None
         self.handler = handler
         self._imagesF = images_matrix[0]
         self._imagesR = images_matrix[1]
@@ -15,10 +15,11 @@ class Weapon(GameObject):
         self._imagesB = images_matrix[3]
         self.images = self._imagesF
         self.image = self.images[0]
-        self.sound = pygame.mixer.Sound("sounds/shotgun_shot.wav")
+        self.sound = pygame.mixer.Sound(sound)
         self.spread = False
         self.cooldown = 0
         self.direction = (0,0)
+        self._rect = self.image.get_rect(topleft=(spawn))
         self.damage = 5
         if type is None:
             self.type = ('gun', 'reg')
@@ -80,8 +81,8 @@ class Weapon(GameObject):
         return
 
     def update(self):
-        self.rect.x += self._x_change
-        self.rect.y += self._y_change
+        self.rect.x = self.owner.rect.x
+        self.rect.y = self.owner.rect.y
         if self.state == "shooting":
             self.shoot()
         #if self.owner.state == "moving":

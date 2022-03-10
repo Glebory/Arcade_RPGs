@@ -2,7 +2,7 @@ import pygame
 import sys
 import controls
 from all_characters import *
-from Gui import *
+
 
 from enemy import *
 import random
@@ -18,7 +18,7 @@ def game():
                 if event.key == pygame.K_ESCAPE:
                     pygame.quit()
                     quit()
-                controls.check_keypress(event,handler.player_group.sprites()[0])
+                controls.check_keypress(event, handler)
             if event.type == pygame.KEYUP:
                 controls.key_up(event,handler.player_group.sprites()[0])
         handler.render()
