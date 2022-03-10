@@ -19,6 +19,7 @@ class Weapon(GameObject):
         self.spread = False
         self.cooldown = 0
         self.direction = (0,0)
+        self._rect = self.image.get_rect(topleft=(spawn))
         self.damage = 5
         if type is None:
             self.type = ('gun', 'reg')

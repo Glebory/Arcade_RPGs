@@ -12,6 +12,7 @@ class Bullet(GameObject):
         self.speed = speed
         self.image = image
         self.damage = 5
+        self._rect = self.image.get_rect(topleft=(spawn))
 
     def update(self):
         self.rect.x += self._x_change

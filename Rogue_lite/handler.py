@@ -2,7 +2,7 @@ import random
 
 import pygame
 from Player import *
-from Arcade_RPGs.Rogue_lite.Gui import Gui
+
 from Arcade_RPGs.Rogue_lite.all_characters import gimbo
 from Arcade_RPGs.Rogue_lite.enemy import Enemy
 import TileMap
@@ -31,6 +31,7 @@ class Handler():
         self._clock = pygame.time.Clock()
         self._font = pygame.font.SysFont("Arial", 11)
         self.player_group = pygame.sprite.GroupSingle()
+        self.weapon_group = pygame.sprite.GroupSingle()
         self.enemy_group = pygame.sprite.Group()
         self.unmovable_group = pygame.sprite.Group()
         self.all_shadows = pygame.sprite.Group()
@@ -39,9 +40,10 @@ class Handler():
         self.ui_group = pygame.sprite.Group()
         self.movable_group = pygame.sprite.Group()
         self.set_up_room()
-        self._gui = Gui(self._screen, self._objects, 480, 640)
+        #self._gui = Gui(self._screen, self._objects, 480, 640)
         pygame.event.set_allowed([pygame.QUIT, pygame.KEYDOWN, pygame.KEYUP])
         pygame.mouse.set_visible(False)
+        self.state = "running"
 
 
     def set_up_room(self):
@@ -59,11 +61,21 @@ class Handler():
         #all_ui.heart((15,15), self)
         #all_ui.coins(625,15)
 
+    def pause(self):
+        if self.state == "running":
+            self.state = "paused"
+        else:
+            self.state = "running"
+
+
     def render(self):
         self._screen.blit(self._background, (0, 0))
         self.collide_check()
-        self.movable_group.update()
-        self.all_shadows.update()
+        if self.state != "paused":
+            self.movable_group.update()
+            self.player_bullets.update()
+            self.all_shadows.update()
+            self.weapon_group.update()
         for object in self._objects:
             object.render(self._screen)
         self._clock.tick()

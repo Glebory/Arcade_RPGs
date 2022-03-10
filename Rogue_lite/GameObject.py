@@ -13,12 +13,11 @@ class GameObject(pygame.sprite.Sprite):
         self._images = images
         self._index = 0
         self._image = self._images[self._index]
-        self._rect = self.image.get_rect(topleft=(spawn))
-        self._rect.width =self.image.get_width()
         self._speed = 0
         self._shadow = None
         self._x_change = 0
         self._y_change = 0
+        self.rect = None
         self._state = "stopped"
         self._frames = 20
 

@@ -16,6 +16,7 @@ def gimbo(spawn, handler):
     speed = 2
     weapon = g_shot(spawn, handler)
     handler.objects.add(weapon)
+    handler.weapon_group.add(weapon)
     name = "Gimbo"
     player = Player(name, spawn, weapon, [imagesF, imagesL, imagesR, imagesB], speed, handler)
     weapon.owner = player
