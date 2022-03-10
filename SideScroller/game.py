@@ -6,7 +6,6 @@ import health
 import tilemap
 
 
-
 class Game:
     def __init__(self):
         pygame.init()
@@ -18,14 +17,15 @@ class Game:
         self._pause = pygame.time.get_ticks()
         self._tilemap = tilemap.TileMap()
         self._tilemap.parse_data(self._tilemap._map)
+        pygame.mouse.set_visible(False)
 
     def game_loop(self):
         game_loop = True
         while game_loop:
             if self._tilemap._player1._counter > 0:
                 self._tilemap._player1._counter -= 1
-
             self.window.fill((192, 68, 143))
+            pygame.display.set_caption("Side Scroller")
             self.window.blit(self._background, [0,0])
             self._tilemap.draw()
             for water in self._tilemap._water:
@@ -47,6 +47,7 @@ class Game:
                 self._tilemap._player1._remaining_health.draw(self.window)
                 self._tilemap._player1.update_left()
                 self._tilemap._player1.update_right()
+                self._tilemap._player1.display_score(self.window)
 
             for enemy in self._tilemap._enemy_group:
                 if enemy.health > 0:
@@ -65,10 +66,15 @@ class Game:
                 coin.update()
                 coin.add_coin(self._tilemap._player1)
 
+            for box in self._tilemap._health_box_group:
+                box.draw(self.window, self._tilemap._player1._screen_scroll)
+                box.get_box(self._tilemap._player1)
+
             if self._state == True:
                 self._tilemap._player1.attack()
-            self._tilemap._player1._weapon.update(self._tilemap._enemy_group, self._tilemap._bat_group, self._tilemap._butterfly_group)
+            self._tilemap._player1._weapon.update(self._tilemap._player1, self._tilemap._enemy_group, self._tilemap._bat_group, self._tilemap._butterfly_group)
             self._tilemap._player1._weapon.draw(self.window)
+
 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -105,6 +111,7 @@ class Game:
             self._clock.tick()
             pygame.display.update()
             print(self._clock)
+
         pygame.quit()
 
 game = Game()

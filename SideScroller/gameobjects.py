@@ -10,6 +10,9 @@ class GameObjects(pygame.sprite.Sprite):
         self._vertical_scroll = 50
         self._screen_scroll = 0
         self._wallpaper_scroll = 0
+    #    pygame.font.init()
+        self._font = pygame.font.Font("C:\WINDOWS\FONTS\AGENCYR.TTF", 32)
+        self._score = 0
 
     @property
     def position(self):
@@ -33,3 +36,7 @@ class GameObjects(pygame.sprite.Sprite):
             if player._health == self._segment:
                 self._segment -= 25
                 player.del_health()
+
+    def display_score(self, window):
+        current_score = self._font.render("Score: " + str(self._score), True, (0, 0, 0))
+        window.blit(current_score, (500, 0))

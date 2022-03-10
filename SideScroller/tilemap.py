@@ -7,15 +7,15 @@ import cave
 import coin
 import bats
 import butterfly
+import health_box
 
 class TileMap:
     def __init__(self):
         self._level = 2
         self._rows = 15
         self._cols = 150
-    #    self._size = 1160 // self._rows
         self._size = 48
-        self._types = 30  # NUMBER OF DIFFERENT TILES USED
+        self._types = 31  # NUMBER OF DIFFERENT TILES USED
         self.images = []
         self._map = []
         self._items = []
@@ -27,6 +27,7 @@ class TileMap:
         self._bat_group = pygame.sprite.Group()
         self._butterfly_group = pygame.sprite.Group()
         self._coin_group = pygame.sprite.Group()
+        self._health_box_group = pygame.sprite.Group()
         self.update()
         self.draw()
 
@@ -50,7 +51,6 @@ class TileMap:
         for y, row in enumerate(data):
             for x, tile in enumerate(row):
                 if tile != -1:
-
                     self.image = self.images[tile]
                     self.rect = self.image.get_rect()
                     self.rect.center = (x * self._size, y * self._size)
@@ -76,7 +76,6 @@ class TileMap:
                     elif tile == 24: # enemy
                         self._enemy1 = enemy.Enemy([49.5 * x, 47.2 * y], 100)
                         self._enemy_group.add(self._enemy1)
-
                     elif tile == 25: # spawn point
                         self._respawnpt.append(self._data)
                     elif tile == 27:
@@ -88,3 +87,6 @@ class TileMap:
                     elif tile == 29:
                         self._enemy3 = butterfly.Butterfly([49.5 * x, 47.2 * y], 100)
                         self._butterfly_group.add(self._enemy3)
+                    elif tile == 30:
+                        self._health_box = health_box.HealthBox([self._size * x, self._size * y])
+                        self._health_box_group.add(self._health_box)

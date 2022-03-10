@@ -12,19 +12,23 @@ class Weapon(GameObjects):
         self.rect = self.image.get_rect()
         self.rect.center = (self.position[0], self.position[1])
 
-    def update(self, enemy_group, bat_group, butterfly_group):
+    def update(self, player, enemy_group, bat_group, butterfly_group):
         self.rect.x += self._speed * self._target
+
         if self.rect.right <= 0 or self.rect.left >= 1160:
             self.kill()
         for enemy in enemy_group:
             if self.rect.colliderect(enemy):
                 enemy._health -= 25
+                player._score += 40
                 self.kill()
         for bat in bat_group:
             if self.rect.colliderect(bat):
                 bat._health -= 25
+                player._score += 30
                 self.kill()
         for butterfly in butterfly_group:
             if self.rect.colliderect(butterfly):
                 butterfly._health -= 25
+                player._score += 30
                 self.kill()

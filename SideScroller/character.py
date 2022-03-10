@@ -6,7 +6,6 @@ class Character(GameObjects):
         super().__init__(position)
         self._health = health
         self._segment = 75
-        
 
     def __str__(self):
         return "%s" % self._position
@@ -39,3 +38,7 @@ class Character(GameObjects):
             self._mass
             self._in_air = False
         self._ySpeed += self._mass
+
+    def damage(self):
+        self._health -= 25
+        self._score += 50
