@@ -30,8 +30,8 @@ def check_keypress(event, handler):
         if event.key == pygame.K_SPACE:
             player.use_item()
 
-        if event.key == pygame.K_p:
-            handler.pause()
+    if event.key == pygame.K_p:
+        handler.pause()
 
 
 def key_up(event, player):
