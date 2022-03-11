@@ -23,6 +23,7 @@ class Weapon(GameObject):
         self.damage = 5
         if type is None:
             self.type = ('gun', 'reg')
+        self._mute = False
 
     def get_imagesF(self):
         return self._imagesF
@@ -65,13 +66,19 @@ class Weapon(GameObject):
 
     owner = property(get_owner, set_owner)
 
+    def mute(self):
+        if self._mute:
+            self._mute = False
+        else:
+            self._mute = True
+
     def shoot(self):
-        print("weapon shoot is called")
         if self.cooldown == 0:
             if self.type[0] == 'gun':
                 if self.type[1] == 'reg':
                     bullet = all_bullets.reg_bullet(self.direction,(self.rect.x,self.rect.y), self.handler, self.damage)
-                    self.sound.play()
+                    if not self.mute:
+                        self.sound.play()
                     self.handler._objects.add(bullet)
                     self.handler.movable_group.add(bullet)
                     self.handler.player_bullets.add(bullet)

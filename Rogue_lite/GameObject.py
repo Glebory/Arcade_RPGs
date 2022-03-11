@@ -118,4 +118,4 @@ class GameObject(pygame.sprite.Sprite):
 
     def render(self, screen):
         screen.blit(self._image, self._rect)
-        pygame.draw.rect(screen, "red", self.rect, 1)
+

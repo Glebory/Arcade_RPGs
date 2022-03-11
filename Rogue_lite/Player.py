@@ -104,8 +104,8 @@ class Player(GameObject):
     def update(self):
         self.rect.x += self._x_change
         self.rect.y += self._y_change
-        if self.health < 0:
-            print("dead")
+
+
     def stop(self):
         self.image = self.images[0]
         self.state = "stopped"
