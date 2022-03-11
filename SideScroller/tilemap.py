@@ -8,6 +8,8 @@ import coin
 import bats
 import butterfly
 import health_box
+import end
+
 
 class TileMap:
     def __init__(self):
@@ -22,7 +24,6 @@ class TileMap:
         self._water = []
         self._coffin = []
         self._respawnpt = []
-        self._cave_group = pygame.sprite.Group()
         self._enemy_group = pygame.sprite.Group()
         self._bat_group = pygame.sprite.Group()
         self._butterfly_group = pygame.sprite.Group()
@@ -48,6 +49,7 @@ class TileMap:
             self.images.append(self.image)
 
     def parse_data(self, data):
+        self.max = len(data[0])
         for y, row in enumerate(data):
             for x, tile in enumerate(row):
                 if tile != -1:
@@ -55,6 +57,7 @@ class TileMap:
                     self.rect = self.image.get_rect()
                     self.rect.center = (x * self._size, y * self._size)
                     self._data = (self.image, self.rect)
+
                     if tile >= 0 and tile <= 6 and tile != 4 or tile == 21 or tile == 26: # ground tiles ..
                         self._items.append(self._data)
                     elif tile == 4:
@@ -68,11 +71,11 @@ class TileMap:
                     elif tile == 19 or tile == 20: # cave
                         pass
                     elif tile == 22:
-                        pass # end of level
+                        self._end = end.End([self._size * x, 45.6 * y])
                     elif tile == 23:
                         self._player1 = player.Player([49.5 * x, 46.8 * y], 100) # player movements
                         self._player1.update_health(self._player1._max_health)
-                        self._player1.move(self._items, self._water, self._respawnpt, self._coffin)
+                        self._player1.move(self._items, self._water, self._respawnpt, self._coffin, self._map)
                     elif tile == 24: # enemy
                         self._enemy1 = enemy.Enemy([49.5 * x, 47.2 * y], 100)
                         self._enemy_group.add(self._enemy1)

@@ -35,10 +35,6 @@ class Enemy(Character):
     def __str__(self):
         return "%s" % (self._position)
 
-    def draw(self, window, screen_scroll):
-        window.blit(self.image, self.rect)
-        self.rect.x += screen_scroll
-
     def move(self):
         self._xSpeed = 0
         if self._direction == 1:
@@ -60,5 +56,3 @@ class Enemy(Character):
                 self.image = self._images2[int(self._current)]
             else:
                 self._direction = 1
-
-    #    self.rect.x += self._xSpeed#

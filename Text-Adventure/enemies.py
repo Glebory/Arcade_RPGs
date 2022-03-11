@@ -51,29 +51,34 @@ class GoblinBrute(Enemy):
         self._resistances = ["Melee"]
         self._weaknesses = ["Water"]
 
+
 class Frog(Enemy):
     # Frog, weak to earth, resists fire and water
     def __init__(self, level, health, spell_list):
         super().__init__("Frog", level, health, spell_list, "images/frog.png")
         self._resistances = ["Fire, Water"]
-        self._weaknesses = ["Earth"]  
+        self._weaknesses = ["Earth"]
+
 
 class Werewolf(Enemy):
     # Frog, weak to earth, resists fire and water
     def __init__(self, level, health, spell_list):
         super().__init__("Werewolf", level, health, spell_list, "images/werewolf.png")
-        self._weaknesses = ["Fire"]  
+        self._weaknesses = ["Fire"]
+
 
 class Bear(Enemy):
     def __init__(self, level, health, spell_list):
-            super().__init__("Bear", level, health, spell_list, "images/bear.png")
-            self._resistances = ["Earth", "Ranged"]
+        super().__init__("Bear", level, health, spell_list, "images/bear.png")
+        self._resistances = ["Earth", "Ranged"]
+
 
 class Boar(Enemy):
     def __init__(self, level, health, spell_list):
-            super().__init__("Boar", level, health, spell_list, "images/boar.png")
-            self._resistances = ["Ranged"]
-            self._weaknesses = ["Fire"]
+        super().__init__("Boar", level, health, spell_list, "images/boar.png")
+        self._resistances = ["Ranged"]
+        self._weaknesses = ["Fire"]
+
 
 zombie = Zombie(1, 12, [a.bite])
 slime = Slime(2, 10, [a.spit])

@@ -2,6 +2,7 @@ class Attacks:
     """
     Class representing attacks, both spells and melee attacks
     """
+
     def __init__(self, name, flavour_text, damage, damage_type, mana_cost):
         self._name = name
         self._flavour_text = flavour_text
@@ -50,19 +51,20 @@ class Ranged(Attacks):
         super().__init__(name, flavour_text, damage, "Ranged", 0)
 
 
-#examples
+# examples
 bite = Melee("Bite", "bites", 3)
 stab = Melee("Stab", "stabs with their sword", 4)
 slam = Melee("Slam", "slams their hammer", 6)
 fireball = Fire("Fireball", "casts a fireball", 6, 5)
-shard = Water("Shards of Ice", "shoots shards of ice", 5, 5)
-rock_throw = Earth("Rock Throw", "throws chunks of rock", 5, 5)
+shard = Water("Shards of Ice", "shoots shards of ice", 6, 5)
+rock_throw = Earth("Rock Throw", "throws chunks of rock", 6, 5)
 spit = Ranged("Spit", "spits green goo", 3)
 shoot = Ranged("Shoot", "shoots an arrow", 4)
-shoot1 = Ranged("Shoot", "shoots an arrow", 5) #for archer player
+shoot1 = Ranged("Shoot", "shoots an arrow", 5)  # for archer player
 water_blast = Water("Water Blast", "shoots an orb of water", 4, 5)
 maul = Melee("Maul", "lunges with claws", 6)
 charge = Melee("Charge", "charges forward", 6)
-earth_fist = Earth("Earth Fist", "summons an earthen fist strikes from the ground", 6, 5)
+earth_fist = Earth("Earth Fist", "summons an earthen fist strikes from the ground", 5, 5)
 fire_arrow = Fire("Fire Arrow", "shoots an arrow cloaked in fire", 6, 5)
 ice_arrow = Water("Ice Arrow", "shoots an arrow made of ice", 6, 5)
+ice_fist = Water("Ice Fist", "punches with an ice covered fist", 5, 5)

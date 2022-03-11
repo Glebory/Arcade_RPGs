@@ -18,6 +18,10 @@ class Character(GameObjects):
     def health(self, new_health):
         self._health = new_health
 
+    def draw(self, window, screen_scroll):
+        window.blit(self.image, self.rect)
+        self.rect.x += screen_scroll
+
     def boundaries(self):
         if self.rect.x <= 0:
             self.rect.x = 0
@@ -36,7 +40,6 @@ class Character(GameObjects):
         self._mass += self._gravity
         if self._mass > 10:
             self._mass
-            self._in_air = False
         self._ySpeed += self._mass
 
     def damage(self):
