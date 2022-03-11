@@ -65,10 +65,6 @@ def process_input(input_text):
         elif command == "archer":
             player = archer1
             player_class = "Archer"
-        else:
-            output_text += "Command not recognised. Defaulting to knight class.<br>"
-            player = knight1
-            player_class = "Knight"
         output_text += "You chose " + player_class + ".<br>Type 'go north' to walk into the mist" \
                                                      " and begin your adventure.<br>"
         player.set_name(playername)  # sets the playername a second time after class is assigned
@@ -197,7 +193,7 @@ def process_input(input_text):
                 player.remove_item(weapon)
                 output_text = "You have equipped " + weapon.get_name() + ".<br>" + old_weapon.get_name() + " has been" \
                                                                                                            " moved to your inventory.<br>"
-            if get_item_object(player_inv.get_armour(), item.upper()):
+            elif get_item_object(player_inv.get_armour(), item.upper()):
                 armour = get_item_object(player_inv.get_armour(), item.upper())
                 old_armour = player.get_armour()
                 player.set_armour(armour)

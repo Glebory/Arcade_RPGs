@@ -7,9 +7,9 @@ class SceneDungeonOne(scene.Scene):
     def __init__(self):
         super().__init__()
         self._name = "dungeon1"
-        self._description = "You reach the dungeon entrance. The entrance is dimly lit with the occasional"\
-                            " torch here and there. There is a musty, rotten smell, as if the area has"\
-                            " been unoccupied for many years. There is a pathway deeper inside to your"\
+        self._description = "You reach the dungeon entrance. The entrance is dimly lit with the occasional" \
+                            " torch here and there. There is a musty, rotten smell, as if the area has" \
+                            " been unoccupied for many years. There is a pathway deeper inside to your" \
                             " <a href='north'>North</a>. The exit is to your <a href='west'>West</a>.<br>"
         self._exits["west"] = "scene1"  # link back to village/hub here
         self._exits["north"] = "dungeon2"
@@ -31,7 +31,7 @@ class SceneDungeonTwo(scene.Scene):
         self._exits["north"] = "dungeon7"  # locked door?
         self._exits["east"] = "dungeon4"
         self._exits["west"] = "dungeon3"
-        self._objects = [ci.coin]
+        self._objects = [ci.icepick]
         self._locations = {"door": "The giant stone door is locked shut. Only a key could open it.<br>"}
         self._npcs = {}
         self._enemy = e.goblin
@@ -42,7 +42,7 @@ class SceneDungeonThree(scene.Scene):
     def __init__(self):
         super().__init__()
         self._name = "dungeon3"
-        self._description = "You walk through the corridor. It continues on going <a href='north'>North</a>, and"\
+        self._description = "You walk through the corridor. It continues on going <a href='north'>North</a>, and" \
                             " the exit is towards the <a href='east'>East</a>.<br>"
         self._exits["north"] = "dungeon5"
         self._exits["east"] = "dungeon2"
@@ -57,7 +57,7 @@ class SceneDungeonFour(scene.Scene):
     def __init__(self):
         super().__init__()
         self._name = "dungeon4"
-        self._description = "You walk through the corridor. It continues on going <a href='north'>North</a>, and"\
+        self._description = "You walk through the corridor. It continues on going <a href='north'>North</a>, and" \
                             " the exit is towards the <a href='west'>West</a>.<br>"
         self._exits["north"] = "dungeon6"
         self._exits["west"] = "dungeon2"
@@ -98,7 +98,7 @@ class SceneDungeonSix(scene.Scene):
                            "barrels": "Wooden storage barrels, built to last."}
         self._npcs = {}
         self._enemy = None
-        self._loot = {"barrels": scene.generate([ci.heal_potion, ci.str_tonic], [1, 1]), "table": ci.d_key }
+        self._loot = {"barrels": scene.generate([ci.heal_potion, ci.str_tonic], [1, 1]), "table": ci.d_key}
 
 
 class SceneDungeonSeven(scene.Scene):
