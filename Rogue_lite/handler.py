@@ -1,6 +1,8 @@
 import random
 
 import pygame
+
+from Arcade_RPGs.Rogue_lite import all_menus
 from Player import *
 
 from Arcade_RPGs.Rogue_lite.all_characters import gimbo
@@ -43,8 +45,9 @@ class Handler():
         #self._gui = Gui(self._screen, self._objects, 480, 640)
         pygame.event.set_allowed([pygame.QUIT, pygame.KEYDOWN, pygame.KEYUP])
         pygame.mouse.set_visible(False)
-        self.state = "running"
-
+        self.state = "main menu"
+        self.menu = all_menus.main_menu(self)
+        self.timer = 900
 
     def set_up_room(self):
         player = gimbo((320,256), self)
@@ -64,20 +67,33 @@ class Handler():
     def pause(self):
         if self.state == "running":
             self.state = "paused"
+            self.timer = 900
         else:
             self.state = "running"
 
+    def quit(self):
+        print("game was quit")
+        pygame.quit()
+        quit()
 
     def render(self):
-        self._screen.blit(self._background, (0, 0))
-        self.collide_check()
-        if self.state != "paused":
+        self._screen.fill("red")
+        if self.state == "running":
+            #if self.timer == 0:
+            self._screen.blit(self._background, (0, 0))
+            self.collide_check()
             self.movable_group.update()
             self.player_bullets.update()
             self.all_shadows.update()
             self.weapon_group.update()
-        for object in self._objects:
-            object.render(self._screen)
+            for object in self._objects:
+                object.render(self._screen)
+            #else:
+              #  self.timer -= 1
+        if self.state == "main menu":
+            print("menu is being called")
+            self.menu.render(self._screen)
+
         self._clock.tick()
         self._window.blit(pygame.transform.scale(self._screen,self._size),(0,0))
         pygame.display.update()

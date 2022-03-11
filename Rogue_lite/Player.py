@@ -98,6 +98,9 @@ class Player(GameObject):
 
     weapon = property(get_weapon, set_weapon)
 
+    def use_item(self):
+        pass
+
     def update(self):
         self.rect.x += self._x_change
         self.rect.y += self._y_change

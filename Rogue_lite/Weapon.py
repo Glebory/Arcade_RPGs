@@ -19,7 +19,7 @@ class Weapon(GameObject):
         self.spread = False
         self.cooldown = 0
         self.direction = (0,0)
-        self._rect = self.image.get_rect(topleft=(spawn))
+        self._rect = self.image.get_rect(topleft=spawn)
         self.damage = 5
         if type is None:
             self.type = ('gun', 'reg')
@@ -73,6 +73,7 @@ class Weapon(GameObject):
                     bullet = all_bullets.reg_bullet(self.direction,(self.rect.x,self.rect.y), self.handler, self.damage)
                     self.sound.play()
                     self.handler._objects.add(bullet)
+                    self.handler.movable_group.add(bullet)
                     self.handler.player_bullets.add(bullet)
                     self.cooldown = 20
         else:

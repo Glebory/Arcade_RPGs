@@ -20,7 +20,7 @@ def game():
                     quit()
                 controls.check_keypress(event, handler)
             if event.type == pygame.KEYUP:
-                controls.key_up(event,handler.player_group.sprites()[0])
+                controls.key_up(event,handler)
         handler.render()
 
 

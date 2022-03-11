@@ -25,6 +25,7 @@ class Enemy(GameObject):
         self.aggro_radius = 100
         self.health = health
         self.damage = 1
+        self.index = random.randint(0,90)
 
 
     def aggro(self, player):
