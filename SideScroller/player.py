@@ -31,7 +31,7 @@ class Player(Character):
         self._left = False
         self._right = False
         self._direction = 1
-        self._speed = 15# 2
+        self._speed = 5# 2
         self._weapon = pygame.sprite.Group()
         self._remaining_health = pygame.sprite.Group()
         self._shot_direction = ""
