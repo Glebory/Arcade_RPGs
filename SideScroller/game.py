@@ -22,11 +22,10 @@ class Game:
     def game_loop(self):
         game_loop = True
         while game_loop:
-
             if self._tilemap._level == 2:
-
                 if self._tilemap._player1._counter > 0:
                     self._tilemap._player1._counter -= 1
+
                 self.window.fill((192, 68, 143))
                 pygame.display.set_caption("Side Scroller")
                 self.window.blit(self._background, [0,0])
@@ -65,6 +64,26 @@ class Game:
                         bat.move()
                         bat.check_player_collision(self._tilemap._player1)
 
+                for butterfly in self._tilemap._butterfly_group:
+                    if butterfly.health > 0:
+                        butterfly.draw(self.window, self._tilemap._player1._screen_scroll)
+                        butterfly.move()
+                        butterfly.check_player_collision(self._tilemap._player1)
+
+                for armman in self._tilemap._arm_man_group:
+                    if armman.health > 0:
+                        if armman._counter > 0:
+                            armman._counter -= 1
+
+                        armman.draw(self.window, self._tilemap._player1._screen_scroll)
+                        armman.move()
+                        armman.check_player_collision(self._tilemap._player1)
+                        armman._weapon.update(self._tilemap._player1, self._tilemap._items)
+                        armman._weapon.draw(self.window)
+                        armman.attack()
+                    else:
+                        pygame.quit()
+
                 for coin in self._tilemap._coin_group:
                     coin.draw(self.window, self._tilemap._player1._screen_scroll)
                     coin.update()
@@ -76,11 +95,8 @@ class Game:
 
                 if self._state == True:
                     self._tilemap._player1.attack()
-                self._tilemap._player1._weapon.update(self._tilemap._player1, self._tilemap._enemy_group, self._tilemap._bat_group, self._tilemap._butterfly_group)
+                self._tilemap._player1._weapon.update(self._tilemap._player1, self._tilemap._enemy_group, self._tilemap._bat_group, self._tilemap._butterfly_group, self._tilemap._arm_man_group)
                 self._tilemap._player1._weapon.draw(self.window)
-
-                self._tilemap._end.draw(self.window, self._tilemap._player1._screen_scroll)
-                self._tilemap._end.end_level(self._tilemap._player1, self._tilemap._level)
 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -116,8 +132,7 @@ class Game:
                         self._state = False
             self._clock.tick()
             pygame.display.update()
-    #        print(self._clock)
-
+            print(self._clock)
         pygame.quit()
 
 game = Game()

@@ -9,7 +9,7 @@ import bats
 import butterfly
 import health_box
 import end
-
+import armman
 
 class TileMap:
     def __init__(self):
@@ -27,6 +27,7 @@ class TileMap:
         self._enemy_group = pygame.sprite.Group()
         self._bat_group = pygame.sprite.Group()
         self._butterfly_group = pygame.sprite.Group()
+        self._arm_man_group = pygame.sprite.Group()
         self._coin_group = pygame.sprite.Group()
         self._health_box_group = pygame.sprite.Group()
         self.update()
@@ -57,7 +58,6 @@ class TileMap:
                     self.rect = self.image.get_rect()
                     self.rect.center = (x * self._size, y * self._size)
                     self._data = (self.image, self.rect)
-
                     if tile >= 0 and tile <= 6 and tile != 4 or tile == 21 or tile == 26: # ground tiles ..
                         self._items.append(self._data)
                     elif tile == 4:
@@ -71,7 +71,8 @@ class TileMap:
                     elif tile == 19 or tile == 20: # cave
                         pass
                     elif tile == 22:
-                        self._end = end.End([self._size * x, 45.6 * y])
+                        self._arm_man = armman.ArmMan([49.5 * x, 39.2 * y], 100)
+                        self._arm_man_group.add(self._arm_man)
                     elif tile == 23:
                         self._player1 = player.Player([49.5 * x, 46.8 * y], 100) # player movements
                         self._player1.update_health(self._player1._max_health)

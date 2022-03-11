@@ -40,6 +40,7 @@ class Character(GameObjects):
         self._mass += self._gravity
         if self._mass > 10:
             self._mass
+            self._in_air = False
         self._ySpeed += self._mass
 
     def damage(self):
