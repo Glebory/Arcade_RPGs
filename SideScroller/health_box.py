@@ -4,18 +4,10 @@ from gameobjects import GameObjects
 class HealthBox(GameObjects):
     def __init__(self, position):
         super().__init__(position)
-    #    self._images = []
-    #    for i in range(30,31):
-    #        self._health_image = pygame.image.load(f'images/tiles/tile{i}.png').convert_alpha()
-    #        self._health_image = pygame.transform.scale(self._health_image, (self._size * 1, self._size * 1))
-    #        self._images.append(self._health_image)
         self._health_image = pygame.image.load("images/tiles/tile30.png").convert_alpha()
         self._health_image = pygame.transform.scale(self._health_image, (self._size * 1, self._size * 1))
-    ##    self._current = 0
-    #    self._health_image = self._images[int(self._current)]
         self.rect = self._health_image.get_rect()
         self.rect.center = (position[0], position[1])
-    #    self._health_box_group = {"health" : self._health_image}
 
     def draw(self, window, scroll):
         window.blit(self._health_image, self.rect)
@@ -29,4 +21,3 @@ class HealthBox(GameObjects):
                 player.update_health(player._max_health)
                 self._health_image = pygame.image.load("images/tiles/tile6.png").convert_alpha()
                 self._health_image = pygame.transform.scale(self._health_image, (self._size * 1, self._size * 1))
-    #    self.kill()

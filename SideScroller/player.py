@@ -31,7 +31,7 @@ class Player(Character):
         self._left = False
         self._right = False
         self._direction = 1
-        self._speed = 15# 2
+        self._speed = 5# 2
         self._weapon = pygame.sprite.Group()
         self._remaining_health = pygame.sprite.Group()
         self._shot_direction = ""
@@ -95,7 +95,7 @@ class Player(Character):
         self._max_health -= 1
         self.update_health(self._max_health)
 
-    def move(self, items, waters, respawn, coffins):
+    def move(self, items, waters, respawn, coffins, map):
         self._screen_scroll = 0
         self._xSpeed = 0
         self._ySpeed = 0
@@ -133,12 +133,7 @@ class Player(Character):
 
         self.rect.x += self._xSpeed
         self.rect.y += self._ySpeed
-        if self.rect.right > 1160 - self._scroll or self.rect.left < self._scroll:
+        if (self.rect.right > 1160 - self._scroll and self._wallpaper_scroll < (len(map[0]) * 48) - 1190) or (self.rect.left < self._scroll and self._wallpaper_scroll > self._xSpeed):
             self.rect.x -= self._xSpeed
-            self._screen_scroll -= self._xSpeed
+            self._screen_scroll = -self._xSpeed
         return self._screen_scroll
-
-
-    def add_inventory(self, item):
-        if item not in self._inventory:
-            self._inventory.append(item)
