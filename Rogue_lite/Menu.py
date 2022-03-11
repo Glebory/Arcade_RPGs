@@ -12,6 +12,13 @@ class Menu:
         self.color = color
         self.selected_button = None
         self.sound = pygame.mixer.Sound("sounds/select.wav")
+        self._mute = False
+
+    def mute(self):
+        if self._mute:
+            self._mute = False
+        else:
+            self._mute = True
 
     def add_button(self, button):
         self.buttons.append(button)
@@ -30,7 +37,8 @@ class Menu:
         else:
             self.selected_button.selected = False
             self.selected_button = self.buttons[self.buttons.index(self.selected_button)+1]
-        self.sound.play()
+        if not self._mute:
+            self.sound.play()
 
     def select_button_above(self):
         if self.buttons.index(self.selected_button) == 0:
@@ -39,12 +47,13 @@ class Menu:
         else:
             self.selected_button.selected = False
             self.selected_button = self.buttons[self.buttons.index(self.selected_button) - 1]
-
-        self.sound.play()
+        if not self._mute:
+            self.sound.play()
 
     def press(self):
         self.selected_button.press()
-        self.sound.play()
+        if not self._mute:
+            self.sound.play()
 
     def render(self, screen):
         if self.border == 0:

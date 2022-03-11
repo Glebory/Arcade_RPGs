@@ -14,4 +14,3 @@ class Tile(pygame.sprite.Sprite):
 
     def render(self, screen):
         screen.blit(self._image, (self.rect))
-        pygame.draw.rect(screen, "Blue", self.rect, 1)

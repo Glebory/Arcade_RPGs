@@ -48,6 +48,8 @@ class Handler():
         self.state = "menu"
         self.menu = all_menus.main_menu(self)
         self.timer = 900
+        pygame.mixer.music.load("sounds/background_music.wav")
+        self._music = False
 
     def set_up_room(self):
         player = gimbo((320,256), self)
@@ -67,9 +69,24 @@ class Handler():
     def pause(self):
         self.menu = all_menus.pause_menu(self)
         self.state = "menu"
+        self.music()
+
+    def back(self):
+        self.menu = all_menus.pause_menu(self)
 
     def resume(self):
-        self.state="running"
+        self.state = "running"
+        self.music()
+
+    def sound(self):
+        self.menu.mute()
+        self.weapon_group.sprites()[0].mute()
+
+    def music(self):
+        if self._music:
+            pygame.mixer.music.stop()
+        else:
+            pygame.mixer.music.play()
 
     def settings(self):
         self.menu = all_menus.settings_menu(self)

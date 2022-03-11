@@ -20,5 +20,5 @@ class Shadow(GameObject):
 
     def render(self, screen):
         screen.blit(self._image, self._rect)
-        pygame.draw.rect(screen, "yellow", self.rect, 1)
+
 
