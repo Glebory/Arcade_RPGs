@@ -45,7 +45,7 @@ class Handler():
         #self._gui = Gui(self._screen, self._objects, 480, 640)
         pygame.event.set_allowed([pygame.QUIT, pygame.KEYDOWN, pygame.KEYUP])
         pygame.mouse.set_visible(False)
-        self.state = "main menu"
+        self.state = "menu"
         self.menu = all_menus.main_menu(self)
         self.timer = 900
 
@@ -65,14 +65,16 @@ class Handler():
         #all_ui.coins(625,15)
 
     def pause(self):
-        if self.state == "running":
-            self.state = "paused"
-            self.timer = 900
-        else:
-            self.state = "running"
+        self.menu = all_menus.pause_menu(self)
+        self.state = "menu"
+
+    def resume(self):
+        self.state="running"
+
+    def settings(self):
+        self.menu = all_menus.settings_menu(self)
 
     def quit(self):
-        print("game was quit")
         pygame.quit()
         quit()
 
@@ -90,8 +92,7 @@ class Handler():
                 object.render(self._screen)
             #else:
               #  self.timer -= 1
-        if self.state == "main menu":
-            print("menu is being called")
+        if self.state == "menu":
             self.menu.render(self._screen)
 
         self._clock.tick()

@@ -30,7 +30,7 @@ def check_keypress(event, handler):
         if event.key == pygame.K_SPACE:
             player.use_item()
 
-    if handler.state == "main menu":
+    else:
         if event.key == pygame.K_w:
             handler.menu.select_button_above()
         if event.key == pygame.K_s:
